@@ -19,8 +19,8 @@
                         <!--<td style="width: 50%; text-align:left;">Test</td>  
                         <td style="width: 50%; text-align:left;">Hello</td>-->                                              
                         <td style="width: 50%;">
-                            <table>
-                                <tr *ngFor="let comp of item?.composition" *ngIf = "item.composition">
+                            <table  *ngIf = "item.composition">
+                                <tr *ngFor="let comp of item?.composition">
                                     {{comp}}
                                 </tr>
                             </table>
