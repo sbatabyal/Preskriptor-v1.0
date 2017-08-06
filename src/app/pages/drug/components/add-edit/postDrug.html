@@ -1,0 +1,58 @@
+<form [formGroup]="drugForm" class="form-horizontal">
+
+    <!--success,info,warning,danger-->
+    <ngbd-alert-closeable class="row" *ngIf="isSuccess == 1" [alertType]="'success'" [alertMessage]="'Drug Details saved successfully!'"></ngbd-alert-closeable>
+    <ngbd-alert-closeable class="row" *ngIf="isSuccess == -1" [alertType]="'danger'" [alertMessage]="'Failed to save Drug Details. Please try again.'"></ngbd-alert-closeable>
+
+    <ba-card title="Drug">
+        <div class="form-group">
+            <div class="control-group">
+                <div class="form-group">
+                    <!--<input type="text" [(ngModel)]="drug.tradeName" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Trade Name" name="tradeName">-->
+                    <input type="text" [(ngModel)]="drug.tradeName" class="form-control" placeholder="Trade Name" formControlName="tradeName">
+                    <small [hidden]="!drugForm.controls.tradeName.hasError('required')" style="color:red;">
+                        Drug name is required.
+                    </small>
+                    <small [hidden]="!drugForm.controls.tradeName.hasError('minlength')" style="color:red;">
+                        Drug name should have minimum 5 characters.
+                    </small>
+                </div>
+
+                <!--composition-->
+                <ba-card title="Composition" baCardClass="with-scroll">
+                    <div formArrayName="composition">
+                        <div *ngFor="let item of drugForm.controls.composition.controls; let i=index" class="panel panel-default">
+
+                            <!--<div class="form-group col-xs-6" [formGroupName]="i">-->
+                            <div class="controls" [formGroupName]="i">
+                                <input type="text" class="form-control" placeholder="Drug Composition" style="margin-bottom: 10px;" formControlName="comp">
+                            </div>
+                            <!--</div>-->
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="col-sm-12">
+                            <a (click)="addInput()" style="cursor:default;" class="fa fa-plus-square">
+                                <span class="fa-custom-font">Add More</span>
+                            </a>
+                            <a (click)="removeInput()" style="cursor:default;" class="fa fa-minus-square">
+                                <span class="fa-custom-font">Remove</span>
+                            </a>
+                        </div>
+                    </div>
+                </ba-card>
+
+
+                <div class="row form-group">
+                    <div class="col-sm-12 text-center">
+                        <button type="submit" (click)="SaveDrug(drugForm.value, drugForm.valid)" class="btn btn-success btn-md center-block" Style="width: 100px; margin-right :5px;" [disabled]="!drugForm.valid">Save</button>
+                        <!--<button type="submit" class="btn btn-success btn-md center-block" Style="width: 100px; margin-right :5px;">Save</button>-->
+                        <button type="button" (click)="Reset()" class="btn btn-warning btn-md center-block" Style="width: 100px; margin-left :5px;">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ba-card>
+</form>
+

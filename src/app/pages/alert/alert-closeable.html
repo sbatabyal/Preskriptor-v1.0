@@ -1,0 +1,4 @@
+<p *ngFor="let alert of alerts" style="width : 100%; margin : 0 12px;">
+    <ngb-alert [type]="alert.type" (close)="closeAlert(alert)">{{ alert.message }}</ngb-alert>
+</p>
+<!--<ngb-alert [type]="'success'" (close)="closeAlert(alert)">This is a Success Alert!</ngb-alert>-->

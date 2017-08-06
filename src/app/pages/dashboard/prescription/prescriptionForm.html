@@ -1,0 +1,465 @@
+<form *ngIf="prescriptionModel" [formGroup]="prescriptionForm" class="form-horizontal">
+
+    <!--success,info,warning,danger-->
+    <ngbd-alert-closeable class="row" *ngIf="isSuccess == 1" [alertType]="'success'" [alertMessage]="'Prescription saved successfully!'"></ngbd-alert-closeable>
+    <ngbd-alert-closeable class="row" *ngIf="isSuccess == -1" [alertType]="'danger'" [alertMessage]="'Failed to save Prescription. Please try again.'"></ngbd-alert-closeable>    
+    
+    <ba-card title="Search Patient">
+        <div class="row">
+            <div class="form-group search col-sm-9" *ngIf="patientNamesCache">
+                <ng2-completer [(ngModel)]="searchInput" [datasource]="patientNamesCache" [minSearchLength]="1" [placeholder]="'Search Patients By Name'" [inputClass]="['form-control']" [matchClass]="['cc-dropdown', 'searchMatch']" [formControlName]="'search'"></ng2-completer>
+                <small [hidden]="!prescriptionForm.controls.search.hasError('required')" style="color:red;">
+                    Patient Name is required.
+                </small>
+            </div>
+            <div class="col-sm-3">
+                <!--<button type="button" style="float:right;" class="btn" (click)="modalSearchResults.open('lg')">Search</button>-->
+                <button type="button" class="btn" (click)="getSearchResults()" [disabled]="prescriptionForm.controls.search.hasError('required')">Search</button>
+            </div>
+        </div>
+    </ba-card>
+
+    <!--Modal for Patient Search Results-->
+    <modal [cssClass]="modal" #modalSearchResults>
+        <modal-header style="background-color: #30a2f0; color:white; border-radius:4px; padding-bottom:10px;" [show-close]="false">
+            <h4 class="modal-title">Search Results</h4>
+        </modal-header>
+        <modal-body>
+            <table class="table table-striped" [mfData]="data" #mf="mfDataTable" [mfRowsOnPage]="rowsOnPage">
+                <thead>
+                    <tr>
+                        <th style="display:none;">
+                            <!--Patient ID is a hidden Field-->
+                        </th>
+                        <th style="width: 20%">
+                            <mfDefaultSorter by="title">Title</mfDefaultSorter>
+                        </th>
+                        <th style="width: 20%">
+                            <mfDefaultSorter by="name">Name</mfDefaultSorter>
+                        </th>
+                        <th style="width: 20%">
+                            <mfDefaultSorter by="age">Age</mfDefaultSorter>
+                        </th>
+                        <th style="width: 20%">
+                            <mfDefaultSorter by="bloodGroup">Blood Group</mfDefaultSorter>
+                        </th>
+                        <th style="width: 20%">
+                            <mfDefaultSorter by="parity">Parity</mfDefaultSorter>
+                        </th>                        
+                    </tr>
+                </thead>
+                <tbody>                    
+                    <tr *ngFor="let item of mf.data; let i = index" (click)="getSelectedRow(item, i)" [class.active]="i == selectedRow">
+                        <td style="display:none;">{{item.id}}</td>
+                        <td style="width: 20%">{{item.title}}</td>
+                        <td style="width: 20%">{{item.name}}</td>
+                        <td style="width: 20%">{{item.age}}</td>
+                        <td style="width: 20%">{{item.bloodGroup | uppercase}}</td>
+                        <td style="width: 20%">{{item.parity}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4">
+                            <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </modal-body>
+        <modal-footer>
+            <div style="margin:0 auto;">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" style="float:left; margin-right: 5px;" (click)="getPrescriptionData(selectedPatient.id)" [disabled] ="!selectedPatient">Select</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modalSearchResults" style="margin-left: 5px;" (click)="closeSearchModal()">Close</button>
+            </div>
+        </modal-footer>
+    </modal>
+
+    <ba-card title="prescription" baCardClass="with-scroll">
+        <div class="panel-group" id="accordion">
+            <ba-card>
+                <div class="panel panel-default" id="panelHeader">
+                    <div class="panel-heading" data-toggle="collapse" data-target="#header">
+                        <h5 class="panel-title">
+                            <span class="fa fa-server"></span> Header
+                        </h5>
+
+                    </div>
+                    <div id="header" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <!--Select a Header-->
+                            <ba-card>
+                                <div class="form-group">
+                                    <div class="control-group">
+                                        <label class="control-label">Select Header</label>
+                                        <div class="form-group">
+                                            <label class="radio-inline custom-radio nowrap">
+                                                <input type="radio" name="rbRecentHeader" id="rbRecentHeader" value="">
+                                                <span style="font-size:x-small;">Most Recent</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ba-card>
+                            <header-form></header-form>                            
+                        </div>
+                    </div>
+                </div>
+            </ba-card>
+
+            <ba-card>
+                <div class="panel panel-default" id="panelPatientInfo">                    
+                    <div class="panel-heading" (click)="toggle()" data-toggle="collapse" data-target="#patientDetails">
+                        <h5 class="panel-title">
+                            <span class="fa fa-server"></span> Patient Details
+                        </h5>
+                    </div>
+                    <div id="patientDetails" class="panel panel-collapse in" *ngIf="isPatientInfoOpened">
+                    <!--<div id="patientDetails" [ngClass]="{
+                            'panel panel-collapse in' : isOpened                             
+                         }" *ngIf="isOpened">-->
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Title" formControlName="title">
+                                <!--<small [hidden]="prescriptionForm.controls.title.valid || (prescriptionForm.controls.title.dirty && !submitted)" style="color:red;">
+                                    Title is required (minimum 2 characters).
+                                </small>-->
+                                <small [hidden]="!prescriptionForm.controls.title.hasError('required')" style="color:red;">
+                                    Title is required.
+                                </small>
+                                <small [hidden]="!prescriptionForm.controls.title.hasError('minlength')" style="color:red;">
+                                    Title should have minimum 2 characters.
+                                </small>
+                            </div>
+                            <div class="form-group" *ngIf="patientsCache">
+                                <input type="text" class="form-control" placeholder="Name" formControlName="_name">
+                                <small [hidden]="!prescriptionForm.controls._name.hasError('required')" style="color:red;">
+                                    Name is required.
+                                </small>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Age" formControlName="age">
+                                <small [hidden]="!prescriptionForm.controls.age.hasError('pattern')" style="color:red;">Age should only contain Numbers.</small>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Blood Group" formControlName="bloodGroup">
+                                <small [hidden]="!prescriptionForm.controls.bloodGroup.hasError('required')" style="color:red;">
+                                    Blood Group is required.
+                                </small>
+                                <small [hidden]="!prescriptionForm.controls.bloodGroup.hasError('pattern')" style="color:red;">Blood Group should be in entered A+/A- format.</small>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="parity" formControlName="parity">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Contact Number" formControlName="phone">
+                                <small [hidden]="!prescriptionForm.controls.phone.hasError('required')" style="color:red;">
+                                    Contact Number is required.
+                                </small>
+                                <small [hidden]="!prescriptionForm.controls.phone.hasError('minlength')" style="color:red;">
+                                    Contact Number should contain 10 digits.
+                                </small>
+                                <small [hidden]="!prescriptionForm.controls.phone.hasError('pattern')" style="color:red;">
+                                    Contact Number should only contain numbers.
+                                </small>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" class="form-control" placeholder="e-mail" formControlName="email">
+                                <small [hidden]="!prescriptionForm.controls.email.hasError('pattern')" style="color:red;">
+                                    E-mail entered is invalid.
+                                </small>
+                            </div>
+                            <!--<div class="col col-md-12 text-center">
+                <button type="button" class="btn btn-warning">Reset</button>
+            </div>-->
+                        </div>
+                    </div>
+                </div>
+            </ba-card>
+
+            <ba-card baCardClass="with-scroll">
+                <div class="panel panel-default" id="panelInvestigations">
+                    <div class="panel-heading" data-toggle="collapse" data-target="#investigations">
+                        <h5 class="panel-title">
+                            <span class="fa fa-server"></span> Investigations
+                        </h5>
+
+                    </div>
+                    <div id="investigations" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <!--CHIEF COMPLAINTS-->
+                            <ba-card>                                
+                                <label class="control-label">Chief Complaints</label>
+                                <div formArrayName="chiefComplaints">
+                                    <div *ngFor="let item of prescriptionForm.controls.chiefComplaints.controls; let i=index" class="panel panel-default">                                     
+                                        <div class="controls" [formGroupName]="i">
+                                            <input type="text" class="form-control" style="margin-bottom: 10px;" formControlName="complaint">
+                                        </div>                                        
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-sm-12">
+                                        <a (click)="addInput('chiefComplaints')" style="cursor:default;" class="fa fa-plus-square">
+                                            <span style="font-family: Arial; margin-top: 10px;">Add More</span>
+                                        </a>
+                                        <a (click)="removeInput('chiefComplaints')" style="cursor:default;" class="fa fa-minus-square">
+                                            <span style="font-family: Arial; margin-top: 10px;">Remove</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </ba-card>
+                            <!--PERSONAL HISTORY-->
+                            <ba-card>
+                                <label class="control-label">Personal History</label>
+                                <div formArrayName="personalHistory">
+                                    <div *ngFor="let item of prescriptionForm.controls.personalHistory.controls; let i=index" class="panel panel-default">
+                                        <div class="controls" [formGroupName]="i">
+                                            <input type="text" class="form-control" style="margin-bottom: 10px;" formControlName="personal">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-sm-12">
+                                        <a (click)="addInput('personalHistory')" style="cursor:default;" class="fa fa-plus-square">
+                                            <span style="font-family: Arial; margin-top: 10px;">Add More</span>
+                                        </a>
+                                        <a (click)="removeInput('personalHistory')" style="cursor:default;" class="fa fa-minus-square">
+                                            <span style="font-family: Arial; margin-top: 10px;">Remove</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </ba-card>
+                            <!--FAMILY HISTORY-->
+                            <ba-card>
+                                <label class="control-label">Family History</label>
+                                <div formArrayName="familyHistory">
+                                    <div *ngFor="let item of prescriptionForm.controls.familyHistory.controls; let i=index" class="panel panel-default">
+                                        <div class="controls" [formGroupName]="i">
+                                            <input type="text" class="form-control" style="margin-bottom: 10px;" formControlName="family">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-sm-12">
+                                        <a (click)="addInput('familyHistory')" style="cursor:default;" class="fa fa-plus-square">
+                                            <span style="font-family: Arial; margin-top: 10px;">Add More</span>
+                                        </a>
+                                        <a (click)="removeInput('familyHistory')" style="cursor:default;" class="fa fa-minus-square">
+                                            <span style="font-family: Arial; margin-top: 10px;">Remove</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </ba-card>
+                            <!--EXAMINATIONS-->
+                            <ba-card>
+                                <label class="control-label">Examinations</label>
+                                <div formArrayName="examinations">
+                                    <div *ngFor="let item of prescriptionForm.controls.examinations.controls; let i=index" class="panel panel-default">
+                                        <div class="controls" [formGroupName]="i">
+                                            <input type="text" class="form-control" style="margin-bottom: 10px;" formControlName="exam">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-sm-12">
+                                        <a (click)="addInput('examinations')" style="cursor:default;" class="fa fa-plus-square">
+                                            <span style="font-family: Arial; margin-top: 10px;">Add More</span>
+                                        </a>
+                                        <a (click)="removeInput('examinations')" style="cursor:default;" class="fa fa-minus-square">
+                                            <span style="font-family: Arial; margin-top: 10px;">Remove</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </ba-card>
+                            <!--ADDITIONAL FINDINGS-->
+                            <ba-card>
+                                <label class="control-label">Additional Findings</label>
+                                <div formArrayName="additionalFindings">
+                                    <div *ngFor="let item of prescriptionForm.controls.additionalFindings.controls; let i=index" class="panel panel-default">
+                                        <div class="controls" [formGroupName]="i">
+                                            <input type="text" class="form-control" style="margin-bottom: 10px;" formControlName="additional">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-sm-12">
+                                        <a (click)="addInput('additionalFindings')" style="cursor:default;" class="fa fa-plus-square">
+                                            <span style="font-family: Arial; margin-top: 10px;">Add More</span>
+                                        </a>
+                                        <a (click)="removeInput('additionalFindings')" style="cursor:default;" class="fa fa-minus-square">
+                                            <span style="font-family: Arial; margin-top: 10px;">Remove</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </ba-card>
+                            <!--<div class="col col-md-12 text-center">
+                                <button type="button" class="btn btn-warning">Reset</button>
+                            </div>-->
+                        </div>
+                    </div>
+                </div>
+            </ba-card>
+
+            <ba-card>
+                <div class="panel panel-default" id="panelTests">
+                    <div class="panel-heading" data-toggle="collapse" data-target="#tests">
+                        <h5 class="panel-title">
+                            <span class="fa fa-server"></span> Tests
+                        </h5>
+
+                    </div>
+                    <div id="tests" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <!--TYPES-->
+                            <ba-card>
+                                <label class="control-label">Test Types</label>
+                                <div formArrayName="testTypes">
+                                    <div *ngFor="let item of prescriptionForm.controls.testTypes.controls; let i=index" class="panel panel-default">
+                                        <div class="controls" [formGroupName]="i" *ngIf="testCache">
+                                            <!--<input type="text" class="form-control" style="margin-bottom: 10px;" formControlName="testType" placeholder="E.g.: Blood - Hb Count">-->                                                                                       
+                                            <ng2-completer [datasource]="testCache" [minSearchLength]="1" [inputClass]="['form-control','completer-input']" [matchClass]="['cc-dropdown', 'searchMatch']" [formControlName]="'testType'" [placeholder]="'E.g.: Blood - Hb Count'"></ng2-completer>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row form-group">
+                                    <div class="col-sm-12">
+                                        <a (click)="addInput('testTypes')" style="cursor:default;" class="fa fa-plus-square">
+                                            <span style="font-family: Arial; margin-top: 10px;">Add More</span>
+                                        </a>
+                                        <a (click)="removeInput('testTypes')" style="cursor:default;" class="fa fa-minus-square">
+                                            <span style="font-family: Arial; margin-top: 10px;">Remove</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </ba-card>      
+                        </div>                        
+                    </div>
+                </div>
+            </ba-card>
+
+            <ba-card>
+                <div class="panel panel-default" id="panelMedication">
+                    <div class="panel-heading" data-toggle="collapse" data-target="#medication">
+                        <h5 class="panel-title">
+                            <span class="fa fa-server"></span> Medication
+                        </h5>
+
+                    </div>
+                    <div id="medication" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <!--Drug Names-->
+                            <ba-card>
+                                <!--<label class="control-label">Drugs</label>-->
+                                <div formArrayName="medications">
+                                    <div *ngFor="let item of prescriptionForm.controls.medications.controls; let i=index" class="panel panel-default">
+                                        <div class="controls" [formGroupName]="i" *ngIf="drugCache">                                            
+                                            <label class="control-label">Drug Name</label>
+                                            <ng2-completer [datasource]="drugCache" [minSearchLength]="1" [inputClass]="['form-control','no-bottom-margin']" [matchClass]="['cc-dropdown', 'searchMatch']" [formControlName]="'drugName'" [placeholder]="'Drug Name'"></ng2-completer>
+                                            <!--<small [hidden]="!prescriptionForm.controls.medications.controls[i].controls.drugName.hasError('required')" style="color:red; margin-top:-5px;">
+                                                Drug Name is required.
+                                            </small>-->     
+                                            <div class="row"></div>                                                                                                                              
+                                            <label class="control-label">Dosage</label>
+                                            <input type="text" class="form-control" placeholder="Dosage" formControlName="dosage">
+                                            <!--<small [hidden]="!prescriptionForm.controls.medications.controls[i].controls.dosage.hasError('required')" style="color:red;">                                                
+                                                Dosage is required.
+                                            </small>-->                                                                                                                                                                           
+                                        </div>                                        
+                                    </div>
+                                </div>
+
+                                <div class="row form-group" style="margin-top:10px;">
+                                    <div class="col-sm-12">
+                                        <a (click)="addInput('medications')" style="cursor:default;" class="fa fa-plus-square">
+                                            <span style="font-family: Arial; margin-top: 10px;">Add More</span>
+                                        </a>
+                                        <a (click)="removeInput('medications')" style="cursor:default;" class="fa fa-minus-square">
+                                            <span style="font-family: Arial; margin-top: 10px;">Remove</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </ba-card>
+                        </div>
+                    </div>
+                </div>
+            </ba-card>
+
+            <ba-card>
+                <div class="panel panel-default" id="panelMisc">
+                    <div class="panel-heading" data-toggle="collapse" data-target="#misc">
+                        <h5 class="panel-title">
+                            <span class="fa fa-server"></span> Miscellaneous
+                        </h5>
+
+                    </div>
+                    <div id="misc" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <!--Follow Up-->
+                            <ba-card title="Follow Up" baCardClass="with-scroll">
+                                <div formArrayName="followUp">
+                                    <div *ngFor="let item of prescriptionForm.controls.followUp.controls; let i=index" class="panel panel-default">                                        
+                                        <div class="controls" [formGroupName]="i">
+                                            <input type="text" class="form-control" style="margin-bottom: 10px;" formControlName="follow">
+                                        </div>                                        
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-sm-12">
+                                        <a (click)="addInput('followUp')" style="cursor:default;" class="fa fa-plus-square">
+                                            <span style="font-family: Arial; margin-top: 10px;">Add More</span>
+                                        </a>
+                                        <a (click)="removeInput('followUp')" style="cursor:default;" class="fa fa-minus-square">
+                                            <span style="font-family: Arial; margin-top: 10px;">Remove</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </ba-card>
+                            
+                            <!--Patient Response-->
+                            <ba-card title="Patient Response" baCardClass="with-scroll">
+                                <div formArrayName="patientResponse">
+                                    <div *ngFor="let item of prescriptionForm.controls.patientResponse.controls; let i=index" class="panel panel-default">                                        
+                                        <div class="controls" [formGroupName]="i">
+                                            <input type="text" class="form-control" style="margin-bottom: 10px;" formControlName="response">
+                                        </div>                                        
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-sm-12">
+                                        <a (click)="addInput('patientResponse')" style="cursor:default;" class="fa fa-plus-square">
+                                            <span style="font-family: Arial; margin-top: 10px;">Add More</span>
+                                        </a>
+                                        <a (click)="removeInput('patientResponse')" style="cursor:default;" class="fa fa-minus-square">
+                                            <span style="font-family: Arial; margin-top: 10px;">Remove</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </ba-card>
+                        </div>
+                    </div>
+                </div>
+            </ba-card>
+
+            <div class="panel-footer row">
+                <div class="col col-md-12 text-center">
+                    <div class="success">
+                        <button type="submit" class="btn btn-success" (click)="savePrescription(prescriptionForm.value, prescriptionForm.valid)" [disabled]="!prescriptionForm.valid" style="margin-right:5px;">
+                            Save
+                        </button>
+                        <button type="button" class="btn btn-warning" (click)="ResetForm()" style="margin-left:5px;">
+                            Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ba-card>    
+</form>

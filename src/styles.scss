@@ -1,0 +1,11 @@
+/* You can add global styles to this file, and also import other style files */
+
+//For Patient Search Modal Table
+  .table tr.active td {
+  background-color:#123456 !important;
+  color: white;
+}
+  /deep/ .searchMatch{
+   // width: 300px !important; 
+    color :deepskyblue;     
+  }

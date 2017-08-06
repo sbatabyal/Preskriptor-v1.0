@@ -1,0 +1,49 @@
+<form [formGroup]="testForm" class="form-horizontal" (ngSumit)="onSubmit(testForm)">    
+        
+    <!--success,info,warning,danger-->
+    <ngbd-alert-closeable class="row" *ngIf="isSuccess == 1" [alertType]="'success'" [alertMessage]="'Test Details saved successfully!'"></ngbd-alert-closeable>
+    <ngbd-alert-closeable class="row" *ngIf="isSuccess == -1" [alertType]="'danger'" [alertMessage]="'Failed to save Test Details. Please try again.'"></ngbd-alert-closeable>    
+
+    <ba-card title="Test">      
+        <div class="form-group">
+            <div class="control-group">                
+                <div class="form-group">                    
+                    <input type="text" [(ngModel)]="test.type"  class="form-control" placeholder="E.g.: Blood - Hb Count" formControlName="type">
+                    <small [hidden]="testForm.controls.type.valid || (testForm.controls.type.touched && !submitted)" style="color:red;">
+                        Test Type is required (minimum 4 characters).
+                    </small>
+                </div>
+                <!--sub types-->
+                <!--<ba-card title="Sub Types" baCardClass="with-scroll">
+                    <div formArrayName="subTypes">
+                        <div *ngFor="let item of testForm.controls.subTypes.controls; let i=index" class="panel panel-default">                            
+                            <div class="controls" [formGroupName]="i">
+                                <input type="text" class="form-control" placeholder="Sub Type" style="margin-bottom: 10px;" formControlName="sType">
+                            </div>                            
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="col-sm-12">
+                            <a (click)="addInput()" style="cursor:default;" class="fa fa-plus-square">
+                                <span class="fa-custom-font">Add More</span>
+                            </a>
+                            <a (click)="removeInput()" style="cursor:default;" class="fa fa-minus-square">
+                                <span class="fa-custom-font">Remove</span>
+                            </a>
+                        </div>
+                    </div>
+                </ba-card>-->
+
+
+                <div class="row form-group">
+                    <div class="col-sm-12 text-center">
+                        <button type="button" (click)="SaveTest(testForm.value, testForm.valid)" class="btn btn-success btn-md center-block" Style="width: 100px; margin-right :5px;" [disabled]="!testForm.valid">Save</button>
+                        <button type="button" (click)="Reset()" class="btn btn-warning btn-md center-block" Style="width: 100px; margin-left :5px;">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ba-card>
+</form>
+
