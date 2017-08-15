@@ -57,7 +57,6 @@ import {
   EqualPasswordsValidator
 } from './validators';
 
-import { HeaderComponent } from '../pages/header/header.component';
 import { Ng2CompleterModule } from "ng2-completer";
 import { Ng2Bs3ModalModule } from 'ng2-bs3-modal/ng2-bs3-modal';
 import { DataTableModule } from "angular2-datatable";
@@ -79,8 +78,7 @@ const NGA_COMPONENTS = [
   BaPageTop,
   BaPictureUploader,
   BaSidebar,
-  BaFileUploader,
-  HeaderComponent,  
+  BaFileUploader,   
   NgbdAlertCloseable  
 ];
 

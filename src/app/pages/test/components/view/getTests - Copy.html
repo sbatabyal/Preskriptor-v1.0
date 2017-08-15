@@ -1,0 +1,32 @@
+<form>              
+    <ba-card title="Test Records">      
+        <div class="form-group">            
+            <table class="table table-striped" [mfData]="data" #mf="mfDataTable" [mfRowsOnPage]="rowsOnPage">
+                <thead>
+                    <tr>                        
+                        <th style="width: 50%; font-weight: bold; font-size:larger;">
+                            <mfDefaultSorter by="key">Item No.</mfDefaultSorter>
+                        </th>
+                        <th style="width: 50%; font-weight:bold; font-size:larger;">
+                            <mfDefaultSorter by="value">Test Type</mfDefaultSorter>
+                        </th>                                                
+                    </tr>
+                </thead>
+                <tbody>                   
+                    <tr *ngFor="let item of mf.data; let i = index">                        
+                        <td style="width: 50%">{{item.key}}</td>
+                        <td style="width: 50%;">{{item.value}}</td>                        
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4">
+                            <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </ba-card>
+</form>
+

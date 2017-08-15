@@ -1,9 +1,8 @@
-import { HeaderDetails } from './header.model';
+//import { HeaderDetails } from './header.model';
 
 export class Prescription {
    // header: HeaderDetails;
-    date: string;
-    //info: PatientInfo;
+    date: string;    
     name: string;
     title: string;
     id: string;
@@ -53,6 +52,40 @@ export class Prescription {
             
         }
     }
+}
+
+export class Header {
+    doctorName: string;
+    degree: string;
+    specialization: string;
+    chamberName: string;
+    chamberAddressLine1: string;
+    chamberAddressLine2: string;
+    chamberAddressLine3: string;
+    chamberPhone: string;
+    fax: string;
+    mobile: string;
+    email: string;
+    website: string;
+    dayTime: string;   
+
+    constructor(json: any) {
+        if (json) {
+            this.doctorName = json.doctorName;
+            this.degree = json.degree;
+            this.email = json.Email;
+            this.specialization = json.specialization;
+            this.chamberName = json.chamberName;
+            this.chamberAddressLine1 = json.chamberAddressLine1;
+            this.chamberAddressLine2 = json.chamberAddressLine2;
+            this.chamberAddressLine3 = json.chamberAddressLine3;
+            this.fax = json.fax;
+            this.mobile = json.mobile;
+            this.website = json.website;
+            this.dayTime = json.dayTime;            
+        }
+
+    } 
 }
 
 export class PatientInfo {

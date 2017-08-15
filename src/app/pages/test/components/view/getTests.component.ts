@@ -3,51 +3,65 @@ import { FormGroup, AbstractControl, FormBuilder, Validators, NgForm, FormArray 
 import { AdminPageService } from '../../../../services/index';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Test } from '../../../../models/prescription.model';
+import { LocalDataSource } from 'ng2-smart-table';
 
 @Component({
   selector: 'get-test-form',
   templateUrl: './getTests.html',
-  styleUrls: ['./getTests.css'],
+  styleUrls: ['./getTests.scss'],
   providers: [AdminPageService]
 })
     
 export class GetTestComponent implements OnInit{
-        
-    public data: any;  
-    public rowsOnPage = 5;
-    public sortBy = "Test Type";
-    public sortOrder = "asc";
             
+    settings = {        
+        pager: {
+            display: true,
+            perPage: 5
+        },
+        actions: {
+            add: false,
+            edit: false
+        },
+        delete: {
+            deleteButtonContent: '<i class="ion-trash-a"></i>',
+            confirmDelete: true
+        },
+        columns: {
+            key: {
+                title: 'Sl. No',
+                type: 'string'                
+            },
+            value: {
+                title: 'Test Type',
+                type: 'string'                
+            }
+        }
+    };
+    source: LocalDataSource = new LocalDataSource();   
+    jsonData: any;   
+          
     constructor(private fb: FormBuilder,
         private adminService: AdminPageService)
     {
-        this.getAllTests();
-        console.log(this.data);        
+        this.source.refresh();
+        this.adminService.getAllTests().subscribe((data) => {
+            this.jsonData = this.createTestJSON(data);
+            this.source.load(this.jsonData);   
+            console.log(data);
+        });           
     }
 
     ngOnInit()
-    {      
+    {            
+        this.source.refresh();
+        this.adminService.getAllTests().subscribe((data) => {
+            this.jsonData = this.createTestJSON(data);
+            this.source.load(this.jsonData);            
+            console.log(data);
+        });                                      
+    }
         
-    }
-    
-    getAllTests(): any {
-
-        this.adminService.getAllTests().subscribe(
-
-            data => {
-                //this.data = data;
-                //console.log(this.data);
-                var json = this.createTestJSON(data);
-                this.data = json;
-            },
-            err => {
-                console.log("Error while retrieving existing Test Details : " + err);
-            },
-            () => {
-                console.log("Existing Test Details retrieved successfully.");
-            }
-        )
-    }
 
     createTestJSON(tests : any): any {
                                      

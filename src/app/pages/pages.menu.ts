@@ -24,7 +24,27 @@ export const PAGES_MENU = [
                   expanded: false,
                   order: 0
               }
-          }
+          },
+          children: [
+              {
+                  path: 'post',
+                  data: {
+                      menu: {
+                          title: 'general.menu.postHeader',
+                          icon: 'ion-edit'
+                      }
+                  }
+              },
+              {
+                  path: 'get',
+                  data: {
+                      menu: {
+                          title: 'general.menu.getHeaders',
+                          icon: 'fa fa-search'
+                      }
+                  }
+              }
+          ]
       },
       {
           path: 'drug',

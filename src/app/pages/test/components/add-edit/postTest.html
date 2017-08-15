@@ -9,8 +9,8 @@
             <div class="control-group">                
                 <div class="form-group">                    
                     <input type="text" [(ngModel)]="test.type"  class="form-control" placeholder="E.g.: Blood - Hb Count" formControlName="type">
-                    <small [hidden]="testForm.controls.type.valid || (testForm.controls.type.touched && !submitted)" style="color:red;">
-                        Test Type is required (minimum 4 characters).
+                    <small [hidden]="!testForm.controls.type.hasError('required')" style="color:red;">
+                        Test Type is required.
                     </small>
                 </div>
                 <!--sub types-->

@@ -6,11 +6,13 @@ import { NgaModule } from '../../theme/nga.module';
 import { RouterModule } from '@angular/router';
 
 import { HeaderComponent } from './header.component';
-import { HeaderService } from '../../services/index';
+import { PostHeaderComponent } from './components/add-edit/postHeader.component';
+import { GetHeaderComponent } from './components/view/getHeaders.component';
+import { AdminPageService } from '../../services/index';
 import { routing } from './header.routing';
 
-const HEADER_COMPONENT = [HeaderComponent];
-const HEADER_SERVICES = [HeaderService];
+const HEADER_COMPONENT = [HeaderComponent, PostHeaderComponent, GetHeaderComponent];
+const ADMIN_SERVICES = [AdminPageService];
 
 @NgModule({
     imports: [
@@ -19,18 +21,18 @@ const HEADER_SERVICES = [HeaderService];
         ReactiveFormsModule,
         FormsModule,
         NgaModule,
-        RouterModule,
-        routing
+        RouterModule,        
+        routing                
     ],
     declarations: [
-        //...HEADER_COMPONENT
+        ...HEADER_COMPONENT,        
     ],
     exports: [
-        //...HEADER_COMPONENT
+        ...HEADER_COMPONENT        
     ],
     providers: [
-        ...HEADER_SERVICES
-    ]
+        ...ADMIN_SERVICES
+    ]     
 })
 
 export class HeaderModule { }

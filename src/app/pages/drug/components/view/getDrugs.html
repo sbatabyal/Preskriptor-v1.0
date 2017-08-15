@@ -1,41 +1,10 @@
-<form>              
-    <ba-card title="Drug Records">      
-               
-        <div class="form-group">                        
-            <table class="table table-bordered table-hover" [mfData]="data" #mf="mfDataTable" [mfRowsOnPage]="rowsOnPage">
-                <thead>
-                    <tr>
-                        <th style="width: 50%; font-weight:bold; font-size:larger; text-align:left;">
-                            <mfDefaultSorter by="tradeName">Trade Name</mfDefaultSorter>
-                        </th>
-                        <th style="width: 50%; font-weight:bold; font-size:larger;">
-                            <mfDefaultSorter by="comp">Composition</mfDefaultSorter>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let item of mf.data; let i = index">
-                        <td style="width: 50%; text-align:left;">{{item?.tradeName}}</td>  
-                        <!--<td style="width: 50%; text-align:left;">Test</td>  
-                        <td style="width: 50%; text-align:left;">Hello</td>-->                                              
-                        <td style="width: 50%;">
-                            <table  *ngIf = "item.composition">
-                                <tr *ngFor="let comp of item?.composition">
-                                    {{comp}}
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="4">
-                            <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
+<form>                                       
+    <div class="widgets">
+        <div class="row">
+            <ba-card title="Drug Records" baCardClass="with-scroll" class="smart-table-container">
+                <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)"></ng2-smart-table>
+            </ba-card>
         </div>
-    </ba-card>
+    </div>    
 </form>
 

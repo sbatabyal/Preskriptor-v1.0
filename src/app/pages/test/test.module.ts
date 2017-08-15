@@ -4,7 +4,7 @@ import { AppTranslationModule } from '../../app.translation.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgaModule } from '../../theme/nga.module';
 import { RouterModule } from '@angular/router';
-import { DataTableModule } from "angular2-datatable";
+import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 import { TestComponent } from './test.component';
 import { PostTestComponent } from './components/add-edit/postTest.component';
@@ -22,8 +22,8 @@ const ADMIN_SERVICES = [AdminPageService];
         ReactiveFormsModule,
         FormsModule,
         NgaModule,
-        RouterModule,
-        DataTableModule,
+        RouterModule,        
+        Ng2SmartTableModule,
         routing                
     ],
     declarations: [

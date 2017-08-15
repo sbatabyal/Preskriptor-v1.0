@@ -19,7 +19,9 @@
     },
     "menu": {
       "dashboard": "Dashboard",
-      "header": "Add/Edit Headers",
+      "header": "Headers",
+      "postHeader": "Add / Edit",
+      "getHeaders": "View",
       "about": "About Preskriptor",
       "drug": "Drugs",
       "postDrug": "Add / Edit",

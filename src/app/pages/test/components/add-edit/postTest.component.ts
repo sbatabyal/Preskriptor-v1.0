@@ -25,7 +25,7 @@ export class PostTestComponent implements OnInit{
     ngOnInit()
     {           
         this.testForm = this.fb.group({
-            type: ['', [Validators.required, Validators.minLength(4)]],
+            type: ['', [Validators.required]],
             //subTypes: this.fb.array([
             //    this.initSubType(),
             //])

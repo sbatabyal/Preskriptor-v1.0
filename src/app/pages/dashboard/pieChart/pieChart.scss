@@ -16,8 +16,10 @@
 
   @media screen and (min-width: 1325px) {
     .pie-chart-item-container {
-      max-width: 25%;
-      flex: 0 0 25%
+      /*max-width: 25%;
+      flex: 0 0 25%*/
+      max-width: 50%;
+      flex: 0 0 50%
     }
   }
   @media screen and (min-width: 700px) and (max-width: 1325px)  {
@@ -41,14 +43,14 @@
       top: 3px;
     }
   }
-  @media screen and
+  /*@media screen and
   (min-width: 1325px) and (max-width: 1650px),
   (min-width: 700px) and (max-width: 830px),
   (max-width: 400px) {
     .chart-icon {
       display: none;
     }
-  }
+  }*/
 
   .chart {
     position: relative;

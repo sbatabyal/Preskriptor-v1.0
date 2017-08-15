@@ -69,32 +69,37 @@ export class AdminPageService {
             });
     }
     
-    getAllDrugs(): any {
-        console.log('getAllDrugs service invoked');
-       
-        return this.http.get(`${this.webApiBaseUrl}/GetDrugList`)
-            .map(res => {                               
-                console.log(res.json());
-                return res.json();
-            })
-            .catch(error => {
-                console.log(error);
-                return Observable.throw(error);
-            });                
-    }            
-
-    //getAllDrugs(): Promise<Drug[]> {
+    //getAllDrugs(): any {
     //    console.log('getAllDrugs service invoked');
-
+       
     //    return this.http.get(`${this.webApiBaseUrl}/GetDrugList`)
-    //        .toPromise()
-    //        .then(res => res.json() as Drug[])
+    //        .map(res => {                               
+    //            console.log(res.json());
+    //            return res.json();
+    //        })
     //        .catch(error => {
     //            console.log(error);
     //            return Observable.throw(error);
-    //        });
-    //}
+    //        });                
+    //}   
 
+    getAllDrugs(): Promise<any> {
+        return this.http.get(`${this.webApiBaseUrl}/GetDrugList`)
+            .toPromise()
+            .then(response => response.json())
+            .catch(this.handleServerError);
+    }
+
+    getAllHeaders() {
+        console.log('getAllHeaders service invoked');
+
+        return this.http.get(`${this.webApiBaseUrl}/GetHeaderList`)
+            .map(res => res.json())
+            .catch(error => {
+                console.log(error);
+                return Observable.throw(error);
+            });
+    }         
     
     private handleServerError(error: Response)
     {
