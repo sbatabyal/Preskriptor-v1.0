@@ -147,10 +147,10 @@ export class Drug {
     constructor(json: any) {
         if (json) {
             this.tradeName = json.tradeName;
-            //this.composition = json.composition;
-            for (var item in json.composition) {
-                this.composition.push(item);
-            }
+            this.composition = json.composition;
+            //for (var item in json.composition) {
+            //    this.composition.push(item);
+            //}
         }
     }
 }
