@@ -4,6 +4,7 @@ import { AppTranslationModule } from '../../app.translation.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgaModule } from '../../theme/nga.module';
 import { RouterModule } from '@angular/router';
+import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 import { HeaderComponent } from './header.component';
 import { PostHeaderComponent } from './components/add-edit/postHeader.component';
@@ -19,6 +20,7 @@ const ADMIN_SERVICES = [AdminPageService];
         CommonModule,
         AppTranslationModule,
         ReactiveFormsModule,
+        Ng2SmartTableModule,
         FormsModule,
         NgaModule,
         RouterModule,        

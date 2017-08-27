@@ -27,11 +27,7 @@ export class GetTestComponent implements OnInit{
             deleteButtonContent: '<i class="ion-trash-a"></i>',
             confirmDelete: true
         },
-        columns: {
-            key: {
-                title: 'Sl. No',
-                type: 'string'                
-            },
+        columns: {            
             value: {
                 title: 'Test Type',
                 type: 'string'                
@@ -79,6 +75,15 @@ export class GetTestComponent implements OnInit{
             jsonList.push(jsonData);
         }        
         return jsonList;
+    }
+
+    onDeleteConfirm(event) {
+        if (window.confirm('Are you sure you want to delete?')) {
+            console.log(event.data.TradeName);
+            event.confirm.resolve();
+        } else {
+            event.confirm.reject();
+        }
     }
     
 }

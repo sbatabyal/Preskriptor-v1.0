@@ -121,9 +121,21 @@ export const PAGES_MENU = [
                   order: 250,
               }
           }
-      },        
+      },  
       {
-        path: 'components',
+          path: 'contact',
+          data: {
+              menu: {
+                  title: 'general.menu.contact',
+                  icon: 'fa fa-phone',
+                  selected: false,
+                  expanded: false,
+                  order: 250,
+              }
+          }
+      },       
+      {
+        path: 'logout',
         data: {
           menu: {
             title: 'general.menu.signOut',

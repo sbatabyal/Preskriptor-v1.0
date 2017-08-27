@@ -12,6 +12,16 @@ export class PrescriptionService {
     public webApiBaseUrl = 'http://54.202.87.150/api/Dynamo'; 
     constructor(private http: Http) {
     }
+    getChamberNames() {
+        console.log('getChamberNames Cache service invoked');
+
+        return this.http.get(`${this.webApiBaseUrl}/GetChamberNames`)
+            .map(res => res.json())
+            .catch(error => {
+                console.log(error);
+                return Observable.throw(error);
+            });
+    }
 
     getPatientPrescription(id: string) {
         console.log('getPatientPrescription service invoked with Patient Id : ' + id);

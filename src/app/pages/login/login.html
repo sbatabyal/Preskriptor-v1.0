@@ -1,33 +1,32 @@
-<div class="auth-main">
+<div class="auth-main">     
   <div class="auth-block">
     <h1 translate>{{'login.title'}}</h1>
-    <a routerLink="/register" class="auth-link" translate>{{'login.signup_link'}}</a>
+    <!--<a routerLink="/register" class="auth-link" translate>{{'login.signup_link'}}</a>-->
 
-    <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" class="form-horizontal">
+    <form [formGroup]="form" (ngSubmit)="login(form.value)" class="form-horizontal">
+        <ngbd-alert-closeable class="row" *ngIf="isLoggedIn == -1" [alertType]="'danger'" [alertMessage]="error"></ngbd-alert-closeable>    
       
         <div class="row">
-            <label for="inputUserName" class="col-sm-2 control-label">{{'UserName'}}</label>
+            <label for="inputUserEmail" class="col-sm-2 control-label">{{'E-mail'}}</label>
         </div>
-        <div class="form-group row" [ngClass]="{'has-error': (!userName.valid && userName.touched), 'has-success': (userName.valid && userName.touched)}">
-            <!--<i class="col-sm-1 fa fa-user prefix"></i>-->            
+        <div class="form-group row" [ngClass]="{'has-error': (!userEmail.valid && userEmail.touched), 'has-success': (userEmail.valid && userEmail.touched)}">                       
             <div class="col-sm-12">
-                <input [formControl]="userName" type="email" class="form-control" id="inputUserName">
+                <input [formControl]="userEmail" type="email" class="form-control" id="inputUserEmail">
             </div>
         </div>
 
         <div class="row">
             <label for="inputPassword3" class="col-sm-2 control-label" translate>{{'login.password'}}</label>
         </div>
-      <div class="form-group row" [ngClass]="{'has-error': (!password.valid && password.touched), 'has-success': (password.valid && password.touched)}">        
-          <!--<i class="col-sm-1 fa fa-lock prefix"></i>-->
+      <div class="form-group row" [ngClass]="{'has-error': (!password.valid && password.touched), 'has-success': (password.valid && password.touched)}">                  
         <div class="col-sm-12">
           <input [formControl]="password" type="password" class="form-control" id="inputPassword3">
         </div>
       </div>
       <div class="form-group row">
-        <div class="col-sm-12">          
+        <div class="col-sm-12 center">          
           <button [disabled]="!form.valid" type="submit" class="btn btn-primary" translate>{{'login.sign_in'}}</button>
-          <a routerLink="/login" class="forgot-pass" translate>{{'login.forgot_password'}}</a>
+          <!--<a (click)="openModal()" class="forgot-pass" translate>{{'login.forgot_password'}}</a>-->
         </div>
       </div>
     </form>

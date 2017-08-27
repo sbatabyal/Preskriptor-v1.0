@@ -13,22 +13,17 @@ import {
   BaThemeConfigProvider
 } from './theme.configProvider';
 
-import {
-  BaAmChart,
+import {  
   BaBackTop,
-  BaCard,
-  BaChartistChart,
+  BaCard,  
   BaCheckbox,
   BaContentTop,
   BaFullCalendar,
   BaMenuItem,
-  BaMenu,
-  BaMsgCenter,
-  BaMultiCheckbox,
-  BaPageTop,
-  BaPictureUploader,
+  BaMenu,  
+  BaPageTop,  
   BaSidebar,
-  BaFileUploader
+  BaMsgCenter  
 } from './components';
 
 import { BaCardBlur } from './components/baCard/baCardBlur.directive';
@@ -63,22 +58,17 @@ import { DataTableModule } from "angular2-datatable";
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdAlertCloseable } from '../pages/alert/alert-closeable.component';
 
-const NGA_COMPONENTS = [
-  BaAmChart,
+const NGA_COMPONENTS = [  
   BaBackTop,
-  BaCard,
-  BaChartistChart,
+  BaCard,  
   BaCheckbox,
   BaContentTop,
   BaFullCalendar,
   BaMenuItem,
-  BaMenu,
-  BaMsgCenter,
-  BaMultiCheckbox,
-  BaPageTop,
-  BaPictureUploader,
-  BaSidebar,
-  BaFileUploader,   
+  BaMenu,  
+  BaPageTop,  
+  BaSidebar,  
+  BaMsgCenter, 
   NgbdAlertCloseable  
 ];
 

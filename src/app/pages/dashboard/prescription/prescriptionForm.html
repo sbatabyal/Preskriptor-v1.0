@@ -15,6 +15,9 @@
             <div class="col-sm-3">
                 <!--<button type="button" style="float:right;" class="btn" (click)="modalSearchResults.open('lg')">Search</button>-->
                 <button type="button" class="btn" (click)="getSearchResults()" [disabled]="prescriptionForm.controls.search.hasError('required')">Search</button>
+                <!--<div *ngIf="hasLoaded == -1">
+                    <i class="fa {{loading}}"></i>
+                </div>-->
             </div>
         </div>
     </ba-card>
@@ -93,10 +96,13 @@
                                     <div class="control-group">
                                         <label class="control-label">Select Chamber For Prescription Header</label>
                                         <div class="form-group">
-                                            <select class="form-control" id="selectHeader">
-                                                <option>1</option>
-                                                <option>2</option>
+                                            <select class="form-control" id="selectHeader" formControlName="chamberSelect">
+                                                <!--<option [selected]="'Select'">Please Select a Chamber</option>-->
+                                                <option *ngFor="let item of chamberNames" [value]="item">{{item}}</option>
                                             </select>
+                                            <small [hidden]="!prescriptionForm.controls.chamberSelect.hasError('required')" style="color:red;">
+                                                Chamber Name is required.
+                                            </small>
                                         </div>
                                     </div>
                                 </div>

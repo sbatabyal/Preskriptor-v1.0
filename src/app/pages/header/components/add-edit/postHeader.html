@@ -50,16 +50,10 @@
                         <input type="text" [(ngModel)]="header.chamberPhone" class="form-control" placeholder="Phone Number" formControlName="chamberPhone">
                         <small [hidden]="!addHeaderForm.controls.chamberPhone.hasError('required')" style="color:red;">
                             Phone Number is required.
-                        </small>
-                        <small [hidden]="!addHeaderForm.controls.chamberPhone.hasError('pattern')" style="color:red;">
-                            Phone Number should only contain numbers.
-                        </small>
+                        </small>                        
                     </div>
                     <div class="form-group">
-                        <input type="text" [(ngModel)]="header.fax" class="form-control" placeholder="Fax Number" formControlName="fax">  
-                        <small [hidden]="!addHeaderForm.controls.fax.hasError('pattern')" style="color:red;">
-                            Fax Number should only contain numbers.
-                        </small>                      
+                        <input type="text" [(ngModel)]="header.fax" class="form-control" placeholder="Fax Number" formControlName="fax">                                               
                     </div>
                     <ba-card title="Chamber Address">
                         <div class="form-group">
@@ -98,7 +92,7 @@
 
             <div class="row form-group">
                 <div class="col-sm-12 text-center">
-                    <button type="button" (click)="SaveTest(addHeaderForm.value, addHeaderForm.valid)" class="btn btn-success btn-md center-block" Style="width: 100px; margin-right :5px;" [disabled]="!addHeaderForm.valid">Save</button>
+                    <button type="button" (click)="SaveHeader(addHeaderForm.value, addHeaderForm.valid)" class="btn btn-success btn-md center-block" Style="width: 100px; margin-right :5px;" [disabled]="!addHeaderForm.valid">Save</button>
                     <button type="button" (click)="Reset()" class="btn btn-warning btn-md center-block" Style="width: 100px; margin-left :5px;">Reset</button>
                 </div>
             </div>

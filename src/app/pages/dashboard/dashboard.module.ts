@@ -10,24 +10,10 @@ import { DataTableModule } from "angular2-datatable";
 import { Dashboard } from './dashboard.component';
 import { routing }       from './dashboard.routing';
 
-//import { PopularApp } from './popularApp';
 import { PrescriptionFormComponent } from './prescription';
 import { PieChart } from './pieChart';
-import { TrafficChart } from './trafficChart';
-//import { UsersMap } from './usersMap';
-//import { LineChart } from './lineChart';
-import { Feed } from './feed';
-import { Todo } from './todo';
-import { Calendar } from './calendar';
-import { CalendarService } from './calendar/calendar.service';
-import { FeedService } from './feed/feed.service';
-//import { LineChartService } from './lineChart/lineChart.service';
 import { PieChartService } from './pieChart/pieChart.service';
-import { TodoService } from './todo/todo.service';
-import { TrafficChartService } from './trafficChart/trafficChart.service';
-//import { UsersMapService } from './usersMap/usersMap.service';
 import { PrescriptionFormModule } from './prescription/prescriptionForm.module';
-//import { AddHeaderModule } from '../addHeaders/addHeader.module';
 
 @NgModule({
   imports: [
@@ -37,32 +23,18 @@ import { PrescriptionFormModule } from './prescription/prescriptionForm.module';
     AppTranslationModule,
     NgaModule,
     routing,
-      Ng2CompleterModule,
-      Ng2Bs3ModalModule,
-      DataTableModule,
-    PrescriptionFormModule,
-    //AddHeaderModule          
+    Ng2CompleterModule,
+    Ng2Bs3ModalModule,
+    DataTableModule,
+    PrescriptionFormModule      
   ],
   declarations: [
-    PrescriptionFormComponent,
-    //PopularApp,
-    PieChart,
-    TrafficChart,
-    //UsersMap,
-    //LineChart,
-    Feed,
-    Todo,
-    Calendar,
+    PrescriptionFormComponent,    
+    PieChart,    
     Dashboard
   ],
-  providers: [
-    CalendarService,
-    FeedService,
-    //LineChartService,
-    PieChartService,
-    TodoService,
-    TrafficChartService,
-    //UsersMapService
+  providers: [    
+    PieChartService    
   ]
 })
 export class DashboardModule {}

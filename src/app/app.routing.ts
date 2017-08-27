@@ -5,7 +5,7 @@ export const routes: Routes = [
   //{ path: '', redirectTo: 'pages', pathMatch: 'full' },
   //{ path: '**', redirectTo: 'pages/dashboard' },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: '**', redirectTo: 'pages/login' }, //First page to Load
+  { path: '**', redirectTo: 'login' }, //First page to Load
   
 ];
 

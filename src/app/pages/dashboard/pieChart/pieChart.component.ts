@@ -16,7 +16,7 @@ export class PieChart {
   private _init = false;
 
   constructor(private _pieChartService: PieChartService) {
-    this.charts = this._pieChartService.getData();
+    this.charts =  this._pieChartService.getData();
   }
 
   ngAfterViewInit() {

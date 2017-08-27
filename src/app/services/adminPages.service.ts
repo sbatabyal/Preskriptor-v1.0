@@ -56,6 +56,29 @@ export class AdminPageService {
                 console.log(error);
                 return Observable.throw(error || 'Server Error');
             });
+    }
+
+    addNewHeader(headerData: any) {
+        console.log('addNewHeader service invoked');
+
+        let headers = new Headers({ 'Content-Type': 'application/json ; charset=utf-8' });
+        let options = new RequestOptions({ headers: headers });
+        let body = JSON.stringify(headerData);
+        console.log(body);
+
+        return this.http.post(`${this.webApiBaseUrl}/SaveHeader`, body, options)
+            .map((res: Response) => {
+                if (res) {
+                    if (res.status === 200) {
+                        console.log(res.status);
+                        return [{ status: res.status, json: res }]
+                    }
+                }
+            })
+            .catch(error => {
+                console.log(error);
+                return Observable.throw(error || 'Server Error');
+            });
     }  
 
     getAllTests() {

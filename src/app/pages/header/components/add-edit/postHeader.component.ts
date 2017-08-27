@@ -33,8 +33,8 @@ export class PostHeaderComponent implements OnInit{
 
             //Chamber Details
             chamberName: ['', [Validators.required]],
-            chamberPhone: ['', Validators.compose([Validators.required, Validators.minLength(10), Validators.pattern('[0-9]*')])],
-            fax: ['', [Validators.pattern('[0-9]*')]],
+            chamberPhone: ['', [Validators.required]],
+            fax: [''],
             chamberAddressLine3: [''],
             chamberAddressLine2: [''],
             chamberAddressLine1: ['', [Validators.required]],
@@ -46,28 +46,49 @@ export class PostHeaderComponent implements OnInit{
     }
     
     
-    SaveTest(testInput: any, isValid: boolean) {
+    SaveHeader(headerInput: any, isValid: boolean) {
 
         this.isSuccess = 0;
-        console.log(testInput);         
+        let parsedFormData = this.parseFormJSON(headerInput);
+        this.header = new Header(parsedFormData);
 
-        this.adminService.addNewTest(testInput).subscribe(
+        this.adminService.addNewHeader(this.header).subscribe(
 
-            data => {                            
-                console.log(data);                
+            data => {
+                console.log(data);
             },
             err => {
-                this.isSuccess = -1;      
-                //this.testForm.reset();          
-                console.log("Error occurred while saving Test Data : " + err);
+                this.isSuccess = -1;
+                //this.drugForm.reset();          
+                console.log("Error occurred while saving Header Data : " + err);
             },
             () => {
-                this.isSuccess = 1;    
-                this.addHeaderForm.reset();           
-                console.log("Test Data saved successfully.");
+                this.isSuccess = 1;
+                this.addHeaderForm.reset();
+                console.log("Header Data saved successfully.");
             }
-        )          
+        )
+
+    }
+
+    parseFormJSON(formData: any): any {
+        var headerModel = new Header('');        
+
+        headerModel.chamberAddressLine1 = formData["chamberAddressLine1"];
+        headerModel.chamberAddressLine2 = formData["chamberAddressLine2"];
+        headerModel.chamberAddressLine3 = formData["chamberAddressLine3"];
+        headerModel.chamberName = formData["chamberName"];
+        headerModel.chamberPhone = formData["chamberPhone"];
+        headerModel.dayTime = formData["dayTime"];
+        headerModel.degree = formData["degree"];
+        headerModel.doctorName = formData["docName"];
+        headerModel.email = formData["email"];
+        headerModel.fax = formData["fax"];
+        headerModel.mobile = formData["mobile"];
+        headerModel.specialization = formData["specialization"];
+        headerModel.website = formData["website"];
         
+        return headerModel;
     }      
 
     Reset() {

@@ -19,17 +19,7 @@ import 'rxjs/add/operator/map';
 
 export class GetDrugComponent implements OnInit{        
 
-    settings = {
-        //add: {
-        //    addButtonContent: '<i class="ion-ios-plus-outline"></i>',
-        //    createButtonContent: '<i class="ion-checkmark"></i>',
-        //    cancelButtonContent: '<i class="ion-close"></i>',
-        //},
-        //edit: {
-        //    editButtonContent: '<i class="ion-edit"></i>',
-        //    saveButtonContent: '<i class="ion-checkmark"></i>',
-        //    cancelButtonContent: '<i class="ion-close"></i>',
-        //},
+    settings = {        
         pager: {
             display: true,
             perPage: 5
@@ -77,23 +67,7 @@ export class GetDrugComponent implements OnInit{
             //this.tableData = data;
             console.log(data);
         });  
-    }       
-
-   //getAllDrugs() : any {
-   //    this.adminService.getAllDrugs().subscribe(
-   //        res => {
-   //            this.data = res;
-   //            console.log(JSON.stringify(res));                              
-   //            return res;
-   //        },
-   //        err => {
-   //            console.log("Error while retrieving existing Drug Details : " + err);
-   //        },
-   //        () => {
-   //            console.log("Existing Drug Details retrieved successfully.");
-   //        }
-   //    )
-   //}    
+    }             
 
     createTestJSON(drugs : any): any {
                                      

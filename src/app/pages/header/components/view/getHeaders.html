@@ -1,10 +1,10 @@
-<form>              
-    <ba-card title="Saved Headers">      
-        <div class="form-group">            
-            <ba-card *ngFor="let header of headers">
-
+<form>
+    <div class="widgets">
+        <div style="overflow-x:scroll;">
+            <ba-card title="Saved Headers" baCardClass="with-scroll" class="smart-table-container">
+                <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)"></ng2-smart-table>
             </ba-card>
         </div>
-    </ba-card>
+    </div>
 </form>
 

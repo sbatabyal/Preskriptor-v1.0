@@ -2,7 +2,7 @@ import { Component, OnInit, NgModule, ViewChild, ViewEncapsulation } from '@angu
 import { style, state, animate, transition, trigger } from '@angular/core';
 import { FormGroup, AbstractControl, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { PrescriptionService, AutoCompleteService, SearchService, AdminPageService } from '../../../services/index';
-import { Prescription, PatientInfo, Findings, Test, Medication, Drug } from '../../../models';
+import { Prescription, PatientInfo, Findings, Test, Medication, Drug, Header } from '../../../models';
 import { ModalComponent } from 'ng2-bs3-modal/ng2-bs3-modal';
 import { Observable } from 'rxjs/Observable';
 import * as $ from 'jquery';
@@ -31,7 +31,10 @@ export class PrescriptionFormComponent implements OnInit {
     public isInvestigationsOpened: boolean = false; 
     public isTestsOpened: boolean = false; 
     public isMedicationsOpened: boolean = false; 
-    public isMiscOpened: boolean = false;    
+    public isMiscOpened: boolean = false; 
+    public loading: string; 
+    public chamberNames = [];       
+       
 
     @ViewChild('modalSearchResults')
     modal: ModalComponent;
@@ -63,16 +66,16 @@ export class PrescriptionFormComponent implements OnInit {
     
     protected prescription: Prescription;
     constructor(private fb: FormBuilder, private autoCompleteService: AutoCompleteService, private searchService: SearchService,
-        private prescriptionService: PrescriptionService, private adminPageService: AdminPageService) {        
-        
+        private prescriptionService: PrescriptionService, private adminPageService: AdminPageService) {  
+        this.loading = "fa-lg fa-spinner fa-spin icon-cog blueincolor";             
     }
-    ngOnInit() {
-
+    ngOnInit() {        
         this.prescriptionModel = new Prescription('[]');
 
         this.patientNamesCache = this.getPatientNamesFromCache();   
         this.testCache = this.getTestsFromCache();  
-        this.drugCache = this.getDrugsFromCache();                          
+        this.drugCache = this.getDrugsFromCache();  
+        this.chamberNames = this.getChamberNames();                        
         
         this.prescriptionForm = this.fb.group({
 
@@ -84,7 +87,8 @@ export class PrescriptionFormComponent implements OnInit {
             phone: ['', Validators.compose([Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]*')])],
             email: ['', Validators.pattern('^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$')],            
             search: ['', Validators.required],
-            parity:[],
+            parity: [],
+            chamberSelect: ['', Validators.required],
 
             /*Investigations*/
             chiefComplaints: this.fb.array([
@@ -208,11 +212,13 @@ export class PrescriptionFormComponent implements OnInit {
             err => {
                 this.isSuccess = -1;
                 console.log("Error occurred while saving Prescription : " + err);
+                document.body.scrollTop = 0;
             },
             () => {
                 this.isSuccess = 1;
                 this.prescriptionForm.reset();
                 console.log("Prescription saved successfully.");
+                document.body.scrollTop = 0;
             }
         )
         console.log(savePresrescriptionModel, isValid);
@@ -246,7 +252,11 @@ export class PrescriptionFormComponent implements OnInit {
         else
         {
             pres.id = null;
-        }                
+        }   
+
+        pres.header = new Header('');
+        pres.header.chamberName = formData["chamberSelect"];  
+        console.log(formData["chamberSelect"]);           
 
         var tempArray: string[] = [];               
 
@@ -341,10 +351,11 @@ export class PrescriptionFormComponent implements OnInit {
         this.selectedRow = -1;
     }
 
-    public getSearchResults() {
+    public getSearchResults() {    
         this.isExistingPatient = 1;
         console.log("SearchInput : " + this.searchInput);
-        this.SearchPatientByName(this.searchInput);        
+        this.SearchPatientByName(this.searchInput);  
+        //this.hasLoaded = 0;      
 
         setTimeout(() => {
             if (this.data && this.data.length == 1) {                
@@ -355,7 +366,7 @@ export class PrescriptionFormComponent implements OnInit {
             else {
                 this.modal.open('lg');
             }
-        }, 800);                 
+        }, 800);                        
                                                            
     }
 
@@ -372,6 +383,23 @@ export class PrescriptionFormComponent implements OnInit {
             },
             () => {
                 console.log("Cached Patient Names retrieved successfully.");
+            }
+        )
+    }
+
+    getChamberNames(): any {
+        this.prescriptionService.getChamberNames().subscribe(
+
+            data => {
+
+                this.chamberNames = data;
+                console.log(this.chamberNames);
+            },
+            err => {
+                console.log("Error while retrieving Chamber Names : " + err);
+            },
+            () => {
+                console.log("Chamber Names retrieved successfully.");
             }
         )
     }
@@ -473,14 +501,18 @@ export class PrescriptionFormComponent implements OnInit {
 
             data => {
 
+                //.hasLoaded = false;
                 console.log(data);               
                 this.prescriptionModel = new Prescription(data);                
                 console.log('Get Model:');
                 console.log(this.prescriptionModel);    
                 this.populatePrescriptionForm();
+                this.loading = "fa-tasks";
+                //this.hasLoaded = true;
             },
             err => {
                 console.log("Error while retrieving Prescription : " + err);
+                this.loading = "fa-tasks";
             },
             () => {
                 console.log("Patient Prescription retrieved successfully.");

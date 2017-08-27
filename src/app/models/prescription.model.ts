@@ -1,7 +1,7 @@
 //import { HeaderDetails } from './header.model';
 
 export class Prescription {
-   // header: HeaderDetails;
+    header: Header;
     date: string;    
     name: string;
     title: string;
@@ -19,7 +19,7 @@ export class Prescription {
 
     constructor(json: any) {
         if (json) {
-            //this.header = json.header;
+            this.header = json.header;
             this.id = json.id;
             this.date = json.date;
             this.age = json.age;
