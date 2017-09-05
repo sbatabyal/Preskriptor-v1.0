@@ -16,7 +16,8 @@ export class PieChart {
   private _init = false;
 
   constructor(private _pieChartService: PieChartService) {
-    this.charts =  this._pieChartService.getData();
+//    this.charts =  this._pieChartService.getData();
+      this.getData();
   }
 
   ngAfterViewInit() {
@@ -26,6 +27,11 @@ export class PieChart {
       this._init = true;
     }
   }
+
+  async getData()
+  {
+      this.charts = await this._pieChartService.getData();
+  }  
 
   private _loadPieCharts() {
 

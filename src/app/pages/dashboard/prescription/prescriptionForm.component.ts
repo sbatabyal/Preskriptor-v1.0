@@ -22,8 +22,7 @@ export class PrescriptionFormComponent implements OnInit {
     public submitted: boolean = false; // keep track on whether form is submitted    
     protected names = [];
     public patientsCache = [];// this.getExistingPatientNames();
-    public testCache = [];
-    //public drugCache = ['Crocin','Saridon','Aspirin','Pan-D','Allegra-180','Calpol'];
+    public testCache = [];    
     public drugCache = [];
     public isSuccess: number = 0;
     public isExistingPatient: number = 0; // Yes = 1, No = -1
@@ -205,7 +204,6 @@ export class PrescriptionFormComponent implements OnInit {
         savePresrescriptionModel = new Prescription(parsedFormData);  
         //savePresrescriptionModel = parsedFormData;                                                                                                                  
         this.prescriptionService.savePrescription(savePresrescriptionModel).subscribe(
-
             data => {
                 console.log(data);
             },
@@ -223,7 +221,40 @@ export class PrescriptionFormComponent implements OnInit {
         )
         console.log(savePresrescriptionModel, isValid);
             
-    }        
+    }
+
+      printPrescription(model: any, isValid: boolean) {
+          this.isSuccess = 0;
+          this.submitted = true;
+          //console.log(model);        
+
+          let savePresrescriptionModel: Prescription = new Prescription('');
+          let parsedFormData = this.parseFormJSON(model);
+          savePresrescriptionModel = new Prescription(parsedFormData);
+          //savePresrescriptionModel = parsedFormData;                                                                                                                  
+          this.prescriptionService.printPrescription(savePresrescriptionModel).subscribe(
+
+              data => {
+                  console.log(data);
+                  var fileURL = URL.createObjectURL(data);
+                  console.log(fileURL)
+                  window.open(fileURL);
+              },
+              err => {
+                  this.isSuccess = -1;
+                  console.log("Error occurred while saving Prescription : " + err);
+                  document.body.scrollTop = 0;
+              },
+              () => {
+                  this.isSuccess = 1;
+                  this.prescriptionForm.reset();
+                  console.log("Prescription saved successfully.");
+                  document.body.scrollTop = 0;
+              }
+          )
+          console.log(savePresrescriptionModel, isValid);
+
+      }        
     //For saving
     parseFormJSON(formData: any) {        
 

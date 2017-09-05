@@ -10,13 +10,19 @@ export class PieChartService {
 
     public jwtHelper: JwtHelper = new JwtHelper();
     public webApiBaseUrl = 'http://54.202.87.150/api/Dynamo'; 
-    public count: any;
-    constructor(private _baConfig: BaThemeConfigProvider, private http: Http) {        
+    public count: any = 0;
+    constructor(private _baConfig: BaThemeConfigProvider, private http: Http) {  
+        //this.count = this.getPatientCount();     
+        console.log(this.getPatientCount()[0]);   
   }
 
-  getPatientCount1() : any{      
-      return this.http.get(`${this.webApiBaseUrl}/GetPatientCount`)
-          .map(res => res.json())
+  getPatientCount() : any{      
+      return this.http.get(`${this.webApiBaseUrl}/GetPatientCount`).toPromise()
+          .then(res => {
+             var result = res.json();
+             console.log(result);
+             return result;
+          })
           .catch(error => {
               console.log(error);
               return error;
@@ -24,12 +30,9 @@ export class PieChartService {
 
   }
 
-  getData() {           
-      let pieColor = this._baConfig.get().colors.custom.dashboardPieChart;      
-      let count: any;    
-      count = this.getPatientCount();  
-      console.log(count);
-    return [
+  async getData() {             
+    let pieColor = this._baConfig.get().colors.custom.dashboardPieChart;                            
+    var chart = [
         {
         //icons : money, face, person, refresh
         color: pieColor,
@@ -40,10 +43,12 @@ export class PieChartService {
         {
         color: pieColor,
         description: 'dashboard.total_patients',        
-        stats: count,
+        stats: await this.getPatientCount(),
         icon: 'face',
       }
     ];
+
+    return chart;
   }
 
   getCurrentUserData()
@@ -56,7 +61,7 @@ export class PieChartService {
       return currentUser;
   }
 
-  getPatientCount()
+  getPatientCount1()
   {
       return 2500;
   }
