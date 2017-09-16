@@ -37,7 +37,8 @@ export class PieChartService {
         //icons : money, face, person, refresh
         color: pieColor,
         description: 'dashboard.current_user',        
-        stats: this.jwtHelper.decodeToken(sessionStorage['authToken']).Name,
+        //stats: this.jwtHelper.decodeToken(sessionStorage['authToken']).Name,
+        stats: this.jwtHelper.decodeToken(sessionStorage['idToken']).nickname,
         icon: 'person',
         },
         {

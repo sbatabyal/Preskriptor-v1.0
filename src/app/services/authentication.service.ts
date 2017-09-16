@@ -12,24 +12,50 @@ export class AuthenticationService {
     logout() {
         // remove user from session storage to log user out
         sessionStorage.removeItem('authToken');
+        sessionStorage.removeItem('idToken');
         AuthenticationService.loginSuccess = false;
     }
 
-    login(email: string, password: string) {    
+    //login(email: string, password: string) {    
+    //    let headers = new Headers({ 'Content-Type': 'application/json ; charset=utf-8' });
+    //    let options = new RequestOptions({ headers: headers });
+    //    return this.http.post('http://localhost:27729/api/TokenAuth', JSON.stringify({ Email: email, Password: password }), options).toPromise()
+    //        .then(function (response) {
+    //            var result = response.json();
+    //            if (result.State == 1) {
+    //                var json = result.Data;
+    //                console.log(result);
+    //                sessionStorage.setItem("authToken", json.accessToken);
+    //                AuthenticationService.loginSuccess = true;
+    //            }
+    //            else { AuthenticationService.loginSuccess = false;}                
+    //            return result;
+    //        });         
+    //}
+
+    login(email: string, password: string) {
         let headers = new Headers({ 'Content-Type': 'application/json ; charset=utf-8' });
         let options = new RequestOptions({ headers: headers });
-        return this.http.post('http://localhost:27729/api/TokenAuth', JSON.stringify({ Email: email, Password: password }), options).toPromise()
+        let body = JSON.stringify({
+            grant_type: "password", username: email, password: password, audience: "https://api.preskriptor.com",
+            scope: "openid",
+            client_id: "1EH1COBONWikQYptgWhMJ2iVJnDuqhWk",
+            client_secret: "YOR2gZ0visHgVrScNmTfSDMWq8VpWn9k51vgnP3v36H1HMc5saKCsFq2plzpxC2i"
+        });
+
+        return this.http.post('https://ritwikroy7.auth0.com/oauth/token', body , options).toPromise()
             .then(function (response) {
                 var result = response.json();
-                if (result.State == 1) {
+                if (response.status === 200) {
                     var json = result.Data;
                     console.log(result);
-                    sessionStorage.setItem("authToken", json.accessToken);
+                    sessionStorage.setItem("authToken", result.access_token);
+                    sessionStorage.setItem("idToken", result.id_token);
                     AuthenticationService.loginSuccess = true;
                 }
-                else { AuthenticationService.loginSuccess = false;}                
-                return result;
-            });         
+                else { AuthenticationService.loginSuccess = false; }
+                return response;
+            });
     }
 
     register(user : User) {

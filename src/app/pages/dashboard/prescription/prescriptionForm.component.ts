@@ -232,12 +232,10 @@ export class PrescriptionFormComponent implements OnInit {
           let parsedFormData = this.parseFormJSON(model);
           savePresrescriptionModel = new Prescription(parsedFormData);
           //savePresrescriptionModel = parsedFormData;                                                                                                                  
-          this.prescriptionService.printPrescription(savePresrescriptionModel).subscribe(
+          this.prescriptionService.printPrescriptionFile(savePresrescriptionModel).subscribe(
 
-              data => {
-                  console.log(data);
-                  var fileURL = URL.createObjectURL(data);
-                  console.log(fileURL)
+              data => {                  
+                  var fileURL = URL.createObjectURL(data);                  
                   window.open(fileURL);
               },
               err => {

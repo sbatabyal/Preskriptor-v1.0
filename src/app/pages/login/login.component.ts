@@ -72,7 +72,7 @@ export class Login implements OnInit{
           this.authenticationService.login(this.userEmail.value, this.password.value)
               .then(              
                   (success) => {
-                      if (success.State == 1) {
+                      if (success.status === 200) {
                           console.log(success);
                           this.isLoggedIn = 1;
                           this.router.navigate(['./pages/dashboard']);
@@ -81,7 +81,7 @@ export class Login implements OnInit{
                       {
                           //alert(success.Message); 
                           this.isLoggedIn = -1;  
-                          this.error = success.Message;                       
+                          this.error = "Login failed. Please try again.";                       
                       } 
                       this.form.reset();                 
                   }

@@ -13,11 +13,7 @@
                 </small>
             </div>
             <div class="col-sm-3">
-                <!--<button type="button" style="float:right;" class="btn" (click)="modalSearchResults.open('lg')">Search</button>-->
                 <button type="button" class="btn" (click)="getSearchResults()" [disabled]="prescriptionForm.controls.search.hasError('required')">Search</button>
-                <!--<div *ngIf="hasLoaded == -1">
-                    <i class="fa {{loading}}"></i>
-                </div>-->
             </div>
         </div>
     </ba-card>
@@ -97,7 +93,6 @@
                                         <label class="control-label">Select Chamber For Prescription Header</label>
                                         <div class="form-group">
                                             <select class="form-control" id="selectHeader" formControlName="chamberSelect">
-                                                <!--<option [selected]="'Select'">Please Select a Chamber</option>-->
                                                 <option *ngFor="let item of chamberNames" [value]="item">{{item}}</option>
                                             </select>
                                             <small [hidden]="!prescriptionForm.controls.chamberSelect.hasError('required')" style="color:red;">
@@ -120,9 +115,6 @@
                         </h5>
                     </div>
                     <div id="patientDetails" class="panel panel-collapse in" *ngIf="isPatientInfoOpened">
-                    <!--<div id="patientDetails" [ngClass]="{
-                            'panel panel-collapse in' : isOpened                             
-                         }" *ngIf="isOpened">-->
                         <div class="panel-body">
                             <div class="form-group">
                                 <input type="text" class="form-control" placeholder="Title" formControlName="title">
@@ -174,9 +166,6 @@
                                     E-mail entered is invalid.
                                 </small>
                             </div>
-                            <!--<div class="col col-md-12 text-center">
-                <button type="button" class="btn btn-warning">Reset</button>
-            </div>-->
                         </div>
                     </div>
                 </div>
@@ -302,9 +291,6 @@
                                     </div>
                                 </div>
                             </ba-card>
-                            <!--<div class="col col-md-12 text-center">
-                                <button type="button" class="btn btn-warning">Reset</button>
-                            </div>-->
                         </div>
                     </div>
                 </div>
