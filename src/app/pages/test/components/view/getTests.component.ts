@@ -79,7 +79,9 @@ export class GetTestComponent implements OnInit{
 
     onDeleteConfirm(event) {
         if (window.confirm('Are you sure you want to delete?')) {
-            console.log(event.data.TradeName);
+            console.log(event.data.value);
+            let testName = event.data.value;
+            var res = this.adminService.deleteTest(testName);
             event.confirm.resolve();
         } else {
             event.confirm.reject();

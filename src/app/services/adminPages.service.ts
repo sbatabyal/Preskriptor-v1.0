@@ -122,7 +122,58 @@ export class AdminPageService {
                 console.log(error);
                 return Observable.throw(error);
             });
-    }         
+    }     
+
+    deleteDrug(drug: any) {
+        console.log('deleteDrug service invoked');
+
+        let headers = new Headers({ 'Content-Type': 'application/json ; charset=utf-8' });        
+        let body = JSON.stringify(drug);
+        let options = new RequestOptions({
+            headers: headers,
+            body: body
+        });        
+        console.log(body);
+
+        return this.http.delete(`${this.webApiBaseUrl}/DeleteDrug`, options)            
+            .subscribe((res: Response) => {
+                console.log(res);                
+            })            
+    }    
+
+    deleteTest(test: any) {
+        console.log('deleteTest service invoked');
+
+        let headers = new Headers({ 'Content-Type': 'application/json ; charset=utf-8' });
+        let body = JSON.stringify(test);
+        let options = new RequestOptions({
+            headers: headers,
+            body: body
+        });
+        console.log(body);
+
+        return this.http.delete(`${this.webApiBaseUrl}/DeleteTest`, options)
+            .subscribe((res: Response) => {
+                console.log(res);
+            })
+    }    
+
+    deleteHeader(headerName: any) {
+        console.log('deleteHeader service invoked');
+
+        let headers = new Headers({ 'Content-Type': 'application/json ; charset=utf-8' });
+        let body = JSON.stringify(headerName);
+        let options = new RequestOptions({
+            headers: headers,
+            body: body
+        });
+        console.log(body);
+
+        return this.http.delete(`${this.webApiBaseUrl}/DeleteHeader`, options)
+            .subscribe((res: Response) => {
+                console.log(res);
+            })
+    }    
     
     private handleServerError(error: Response)
     {

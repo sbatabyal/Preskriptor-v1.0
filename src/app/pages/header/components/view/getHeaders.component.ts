@@ -124,11 +124,13 @@ export class GetHeaderComponent implements OnInit{
             jsonList.push(jsonData);
         }
         return jsonList;
-    }
+    }    
 
     onDeleteConfirm(event) {
         if (window.confirm('Are you sure you want to delete?')) {
-            console.log(event.data.TradeName);
+            console.log(event.data.ChamberName);
+            let chamberName = event.data.ChamberName;
+            var res = this.adminService.deleteHeader(chamberName);
             event.confirm.resolve();
         } else {
             event.confirm.reject();

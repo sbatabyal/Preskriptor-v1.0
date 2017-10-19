@@ -95,6 +95,8 @@ export class GetDrugComponent implements OnInit{
     onDeleteConfirm(event) {
         if (window.confirm('Are you sure you want to delete?')) {
             console.log(event.data.TradeName);
+            let drugName = event.data.TradeName;
+            var res = this.adminService.deleteDrug(drugName);            
             event.confirm.resolve();
         } else {
             event.confirm.reject();

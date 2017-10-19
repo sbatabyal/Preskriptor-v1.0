@@ -73,7 +73,7 @@ export class PrescriptionService {
             });
     }    
 
-    printPrescriptionFile(oModel: Prescription) {
+    SaveAndPrintPrescription(oModel: Prescription) {
         console.log('savePrescription service invoked');
 
         let headers = new Headers({ 'Content-Type': 'application/json ; charset=utf-8' });
@@ -81,7 +81,7 @@ export class PrescriptionService {
         let body = JSON.stringify(oModel);
         console.log(body);
 
-        return this.http.post(`${this.webApiBaseUrl}/PrintPrescriptionFile`, body, { headers : headers, responseType: ResponseContentType.Blob })
+        return this.http.post(`${this.webApiBaseUrl}/SaveAndPrintPrescription`, body, { headers : headers, responseType: ResponseContentType.Blob })
             .map((res: Response) => {
                 if (res) {
                     if (res.status === 200) {

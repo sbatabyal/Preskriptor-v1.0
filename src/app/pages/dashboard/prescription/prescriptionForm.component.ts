@@ -223,7 +223,7 @@ export class PrescriptionFormComponent implements OnInit {
             
     }
 
-      printPrescription(model: any, isValid: boolean) {
+      SaveAndPrintPrescription(model: any, isValid: boolean) {
           this.isSuccess = 0;
           this.submitted = true;
           //console.log(model);        
@@ -232,7 +232,7 @@ export class PrescriptionFormComponent implements OnInit {
           let parsedFormData = this.parseFormJSON(model);
           savePresrescriptionModel = new Prescription(parsedFormData);
           //savePresrescriptionModel = parsedFormData;                                                                                                                  
-          this.prescriptionService.printPrescriptionFile(savePresrescriptionModel).subscribe(
+          this.prescriptionService.SaveAndPrintPrescription(savePresrescriptionModel).subscribe(
 
               data => {                  
                   var fileURL = URL.createObjectURL(data);                  
