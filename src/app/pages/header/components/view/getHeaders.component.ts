@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild, NgModule} from '@angular/core';
 import { FormGroup, AbstractControl, FormBuilder, Validators, NgForm, FormArray } from '@angular/forms';
 import { AdminPageService } from '../../../../services/index';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Header } from '../../../../models/prescription.model';
+import { Letterhead } from '../../../../models/prescription.model';
 import { LocalDataSource } from 'ng2-smart-table';
 
 @Component({
@@ -14,7 +14,7 @@ import { LocalDataSource } from 'ng2-smart-table';
     
 export class GetHeaderComponent implements OnInit{ 
 
-    public headers: Header[];     
+    public headers: Letterhead[];     
     settings = {
         pager: {
             display: true,
@@ -44,6 +44,11 @@ export class GetHeaderComponent implements OnInit{
                 type: 'string',
                 sort: true                
             },
+            Mobile: {
+                title: 'Mobile',
+                type: 'string',
+                sort: true
+            },
             Fax: {
                 title: 'Fax',
                 type: 'string',
@@ -59,7 +64,7 @@ export class GetHeaderComponent implements OnInit{
                 type: 'string',
                 sort: true                
             },
-            DayTime: {
+            Timings: {
                 title: 'Days & Time',
                 type: 'string',
                 sort: true                
@@ -72,12 +77,12 @@ export class GetHeaderComponent implements OnInit{
     constructor(private fb: FormBuilder,
         private adminService: AdminPageService)
     {        
-        this.source.refresh();
-        this.adminService.getAllHeaders().subscribe((data) => {
-            this.jsonData = this.createChamberJSON(data);
-            this.source.load(this.jsonData);
-            console.log(data);
-        });         
+        //this.source.refresh();
+        //this.adminService.getAllHeaders().subscribe((data) => {
+        //    this.jsonData = this.createChamberJSON(data);
+        //    this.source.load(this.jsonData);
+        //    console.log(data);
+        //});         
     }
 
     ngOnInit()
@@ -112,17 +117,29 @@ export class GetHeaderComponent implements OnInit{
         var jsonData = {};        
 
         for (let item of headers) {
+            var address = '';
             jsonData = {};
             jsonData["ChamberName"] = item.chamberName;
-            jsonData["ChamberAddress"] = item.chamberAddressLine1 + "\n" + item.chamberAddressLine2 + "\n" + item.chamberAddressLine3;
-            jsonData["ChamberPhone"] = item.chamberPhone;
-            jsonData["Fax"] = item.fax;
-            jsonData["Email"] = item.email;
-            jsonData["Website"] = item.website;
-            jsonData["DayTime"] = item.dayTime;            
+
+            if (item.chamberAddressLine1 != null)
+            { address += item.chamberAddressLine1 }
+            if (item.chamberAddressLine2 != null)
+            { address += "\n" + item.chamberAddressLine2}
+            if (item.chamberAddressLine3 != null)
+            { address += "\n" + item.chamberAddressLine3 }
+                console.log(address.toString())
+
+            jsonData["ChamberAddress"] = address.toString();
+            jsonData["ChamberPhone"] = item.chamberPhone != null ? item.chamberPhone : '-';
+            jsonData["Mobile"] = item.mobile != null ? item.mobile : '-';
+            jsonData["Fax"] = item.fax != null ? item.fax : '-';
+            jsonData["Email"] = item.email != null ? item.email : '-';
+            jsonData["Website"] = item.website != null ? item.website : '-';
+            jsonData["Timings"] = item.timings != null ? item.timings : '-';            
 
             jsonList.push(jsonData);
         }
+        console.log(jsonList)
         return jsonList;
     }    
 

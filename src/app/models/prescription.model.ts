@@ -1,16 +1,10 @@
 //import { HeaderDetails } from './header.model';
 
 export class Prescription {
-    header: Header;
-    date: string;    
-    name: string;
-    title: string;
-    id: string;
-    age: number;
-    bloodGroup: string;
-    email: string;
-    contactNumber: string;
-    parity: string;      
+    letterhead: Letterhead;
+    prescriptionDate : string;        
+    prescriptionID: string;
+    patientInfo: Patient;    
     findings: Findings;
     tests: Test[];
     medications: Medication[];
@@ -19,16 +13,10 @@ export class Prescription {
 
     constructor(json: any) {
         if (json) {
-            this.header = json.header;
-            this.id = json.id;
-            this.date = json.date;
-            this.age = json.age;
-            this.bloodGroup = json.bloodGroup;
-            this.email = json.email;
-            this.name = json.name;
-            this.contactNumber = json.contactNumber;
-            this.title = json.title;
-            this.parity = json.parity;
+            this.letterhead = json.letterhead;
+            this.prescriptionID = json.prescriptionID;
+            this.prescriptionDate = json.prescriptionDate;
+            this.patientInfo = json.patientInfo;
             if (json.findings) {
                 this.findings = new Findings();
                 this.findings.additionalFindings = json["findings"]["additionalFindings"];
@@ -54,7 +42,7 @@ export class Prescription {
     }
 }
 
-export class Header {
+export class Letterhead {
     doctorName: string;
     degree: string;
     specialization: string;
@@ -67,47 +55,50 @@ export class Header {
     mobile: string;
     email: string;
     website: string;
-    dayTime: string;   
+    timings: string;   
 
     constructor(json: any) {
         if (json) {
             this.doctorName = json.doctorName;
             this.degree = json.degree;
-            this.email = json.Email;
+            this.email = json.email;
             this.specialization = json.specialization;
             this.chamberName = json.chamberName;
             this.chamberAddressLine1 = json.chamberAddressLine1;
             this.chamberAddressLine2 = json.chamberAddressLine2;
             this.chamberAddressLine3 = json.chamberAddressLine3;
+            this.chamberPhone = json.chamberPhone;
             this.fax = json.fax;
             this.mobile = json.mobile;
             this.website = json.website;
-            this.dayTime = json.dayTime;            
+            this.timings = json.timings;            
         }
 
     } 
 }
 
-export class PatientInfo {
-    _name?: string; //required
+export class Patient {
+    patientName?: string; //required
     title: string;
-    id: string;
+    patientID : string;
     age: number;
     bloodGroup: string;
     email: string;
     phone: string;
-    parity: string;    
+    parity: string; 
+    contactNumber: string;   
 
     constructor(json: any
     ) {
         if (json) {
+            this.patientID = json.patientID;
             this.age = json.Age;
             this.bloodGroup = json.BloodGroup;
             this.email = json.Email;
-            this._name = json.Name;
+            this.patientName = json.patientName ;
             this.phone = json.ContactNumber;
             this.title = json.Title;
-            this.parity = json.Parity;
+            this.parity = json.Parity;            
         }
 
     }
@@ -147,10 +138,7 @@ export class Drug {
     constructor(json: any) {
         if (json) {
             this.tradeName = json.tradeName;
-            this.composition = json.composition;
-            //for (var item in json.composition) {
-            //    this.composition.push(item);
-            //}
+            this.composition = json.composition;            
         }
     }
 }

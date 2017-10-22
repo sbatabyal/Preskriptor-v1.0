@@ -1,35 +1,29 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response } from '@angular/http';
+import { Http, Headers, Response, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch'
 import 'rxjs/add/operator/toPromise';
 import { Prescription } from '../models/prescription.model';
+import * as config from '../config/appSettings.json';
 
 @Injectable()
 export class SearchService {
-    public webApiBaseUrl = 'http://54.202.87.150/api/Dynamo/ByName';
-    //public webApiBaseUrl = 'http://54.202.87.150/api/Dynamo';
+    public webApiBaseUrl: any = config['apiBaseUrl']; 
+    public authHeader: any = 'Bearer ' + sessionStorage['authToken'];   
     
-    
-    constructor(private http: Http) { }
-
-    //getPatientNamesFromCache() {
-    //    console.log('service invoked');
-        
-    //    return this.http.get(this.webApiBaseUrl)
-    //        .map(res => res.json())
-    //        .catch(error => {
-    //            console.log(error);
-    //            return Observable.throw(error);
-    //        });
-    //}  
+    constructor(private http: Http) {        
+    }      
 
     SearchPatientsByName(name: string)
     {
         console.log('SearchPatientsByName service invoked...');
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json ; charset=utf-8');
+        headers.append('Authorization', `${this.authHeader}`);
+        let options = new RequestOptions({ headers: headers });
 
-        return this.http.get(`${this.webApiBaseUrl}?Name=${name}`)
+        return this.http.get(`${this.webApiBaseUrl}/Patients/Search/${name}`, options)
            //return this.http.get('assets/data.json')
             .map(res => res.json())
             .catch(error => {

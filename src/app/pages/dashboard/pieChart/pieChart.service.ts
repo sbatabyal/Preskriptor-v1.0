@@ -4,28 +4,42 @@ import { Http, Headers, Response, RequestOptions, Request, RequestMethod } from 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch'
 import { JwtHelper } from 'angular2-jwt';
+import * as config from '../../../config/appSettings.json';
 
 @Injectable()
 export class PieChartService {
 
     public jwtHelper: JwtHelper = new JwtHelper();
-    public webApiBaseUrl = 'http://54.202.87.150/api/Dynamo'; 
+    public webApiBaseUrl: any = config['apiBaseUrl'];
+    public authHeader: any = 'Bearer ' + sessionStorage['authToken'];  
     public count: any = 0;
     constructor(private _baConfig: BaThemeConfigProvider, private http: Http) {  
         //this.count = this.getPatientCount();     
         console.log(this.getPatientCount()[0]);   
   }
 
-  getPatientCount() : any{      
-      return this.http.get(`${this.webApiBaseUrl}/GetPatientCount`).toPromise()
+    getPatientCount(): any{      
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json ; charset=utf-8');
+        headers.append('Authorization', `${this.authHeader}`);
+        let options = new RequestOptions({ headers: headers });
+
+        return this.http.get(`${this.webApiBaseUrl}/Patients/Count`, options).toPromise()
           .then(res => {
-             var result = res.json();
-             console.log(result);
-             return result;
+              var result = res.json();              
+              console.log(result);
+              if (res.status === 200)
+              {
+                  return result;
+              }
+              else
+              {
+                  return "Unable to fetch Patient Count";
+              }             
           })
           .catch(error => {
               console.log(error);
-              return error;
+              return "Unable to fetch Patient Count";
           });
 
   }

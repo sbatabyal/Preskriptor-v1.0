@@ -38,7 +38,7 @@ export class Login implements OnInit{
     this.password = this.form.controls['password'];
   }
 
-  ngOnInit() {
+  ngOnInit() {      
       // reset login status
       this.authenticationService.logout();
 

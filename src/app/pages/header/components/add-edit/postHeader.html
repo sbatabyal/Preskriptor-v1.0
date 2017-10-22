@@ -31,6 +31,9 @@
                         <small [hidden]="!addHeaderForm.controls.mobile.hasError('minlength')" style="color:red;">
                             Mobile Number should contain 10 digits.
                         </small>
+                        <small [hidden]="!addHeaderForm.controls.mobile.hasError('maxlength')" style="color:red;">
+                            Mobile Number should contain 10 digits.
+                        </small>
                         <small [hidden]="!addHeaderForm.controls.mobile.hasError('pattern')" style="color:red;">
                             Mobile Number should only contain numbers.
                         </small>

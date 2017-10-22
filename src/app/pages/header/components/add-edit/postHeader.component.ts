@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild} from '@angular/core';
 import { FormGroup, AbstractControl, FormBuilder, Validators, NgForm, FormArray } from '@angular/forms';
 import { AdminPageService } from '../../../../services/index';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Header } from '../../../../models/prescription.model';
+import { Letterhead } from '../../../../models/prescription.model';
 
 @Component({
   selector: 'header-form',
@@ -12,7 +12,7 @@ import { Header } from '../../../../models/prescription.model';
 })
 export class PostHeaderComponent implements OnInit{
     
-    public header: Header = new Header('');    
+    public header: Letterhead = new Letterhead('');    
     public static inputCount = 1;
     public addHeaderForm: FormGroup;
     public isSuccess: number = 0;    
@@ -50,7 +50,7 @@ export class PostHeaderComponent implements OnInit{
 
         this.isSuccess = 0;
         let parsedFormData = this.parseFormJSON(headerInput);
-        this.header = new Header(parsedFormData);
+        this.header = new Letterhead(parsedFormData);
 
         this.adminService.addNewHeader(this.header).subscribe(
 
@@ -72,14 +72,14 @@ export class PostHeaderComponent implements OnInit{
     }
 
     parseFormJSON(formData: any): any {
-        var headerModel = new Header('');        
+        var headerModel = new Letterhead('');        
 
         headerModel.chamberAddressLine1 = formData["chamberAddressLine1"];
         headerModel.chamberAddressLine2 = formData["chamberAddressLine2"];
         headerModel.chamberAddressLine3 = formData["chamberAddressLine3"];
         headerModel.chamberName = formData["chamberName"];
         headerModel.chamberPhone = formData["chamberPhone"];
-        headerModel.dayTime = formData["dayTime"];
+        headerModel.timings = formData["dayTime"];
         headerModel.degree = formData["degree"];
         headerModel.doctorName = formData["docName"];
         headerModel.email = formData["email"];

@@ -8,9 +8,9 @@
         <div class="row">
             <div class="form-group search col-sm-9" *ngIf="patientNamesCache">
                 <ng2-completer [(ngModel)]="searchInput" [datasource]="patientNamesCache" [minSearchLength]="1" [placeholder]="'Search Patients By Name'" [inputClass]="['form-control']" [matchClass]="['cc-dropdown', 'searchMatch']" [formControlName]="'search'"></ng2-completer>
-                <small [hidden]="!prescriptionForm.controls.search.hasError('required')" style="color:red;">
+                <!--<small [hidden]="!prescriptionForm.controls.search.hasError('required')" style="color:red;">
                     Patient Name is required.
-                </small>
+                </small>-->
             </div>
             <div class="col-sm-3">
                 <button type="button" class="btn" (click)="getSearchResults()" [disabled]="prescriptionForm.controls.search.hasError('required')">Search</button>
@@ -47,11 +47,11 @@
                         </th>                        
                     </tr>
                 </thead>
-                <tbody>                    
-                    <tr *ngFor="let item of mf.data; let i = index" (click)="getSelectedRow(item, i)" [class.active]="i == selectedRow">
-                        <td style="display:none;">{{item.id}}</td>
+                <tbody>                                  
+                    <tr *ngFor="let item of mf.data; let i = index" (click)="getSelectedRow(item, i)" [class.active]="i == selectedRow">                        
+                        <td style="display:none;">{{item.patientID}}</td>
                         <td style="width: 20%">{{item.title}}</td>
-                        <td style="width: 20%">{{item.name}}</td>
+                        <td style="width: 20%">{{item.patientName}}</td>
                         <td style="width: 20%">{{item.age}}</td>
                         <td style="width: 20%">{{item.bloodGroup | uppercase}}</td>
                         <td style="width: 20%">{{item.parity}}</td>
@@ -68,7 +68,7 @@
         </modal-body>
         <modal-footer>
             <div style="margin:0 auto;">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" style="float:left; margin-right: 5px;" (click)="getPrescriptionData(selectedPatient.id)" [disabled] ="!selectedPatient">Select</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" style="float:left; margin-right: 5px;" (click)="getPrescriptionData(selectedPatient.patientID)" [disabled] ="!selectedPatient">Select</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modalSearchResults" style="margin-left: 5px;" (click)="closeSearchModal()">Close</button>
             </div>
         </modal-footer>
@@ -154,6 +154,9 @@
                                     Contact Number is required.
                                 </small>
                                 <small [hidden]="!prescriptionForm.controls.phone.hasError('minlength')" style="color:red;">
+                                    Contact Number should contain 10 digits.
+                                </small>
+                                <small [hidden]="!prescriptionForm.controls.phone.hasError('maxlength')" style="color:red;">
                                     Contact Number should contain 10 digits.
                                 </small>
                                 <small [hidden]="!prescriptionForm.controls.phone.hasError('pattern')" style="color:red;">

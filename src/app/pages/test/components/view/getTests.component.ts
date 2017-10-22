@@ -69,7 +69,7 @@ export class GetTestComponent implements OnInit{
         {
             jsonData = {};
             jsonData["key"] = count;
-            jsonData["value"] = item;
+            jsonData["value"] = item.type;
             count++;
                      
             jsonList.push(jsonData);

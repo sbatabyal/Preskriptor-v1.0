@@ -4,23 +4,27 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch'
 import { Test, Drug } from '../models/prescription.model';
+import * as config from '../config/appSettings.json';
 
 @Injectable()
-export class AdminPageService {
-    public webApiBaseUrl = 'http://54.202.87.150/api/Dynamo';
+export class AdminPageService {    
     public drugs: Drug[];
+    public webApiBaseUrl: any = config['apiBaseUrl'];
+    public authHeader: any = 'Bearer ' + sessionStorage['authToken'];
 
-    constructor(private http: Http) { }      
+    constructor(private http: Http) {        
+    }      
 
     addNewTest(testData: any) {
         console.log('saveTestData service invoked');
-
-        let headers = new Headers({ 'Content-Type': 'application/json ; charset=utf-8' });
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json ; charset=utf-8');
+        headers.append('Authorization', `${this.authHeader}`);        
         let options = new RequestOptions({ headers: headers });
         let body = JSON.stringify(testData);
         console.log(body);
 
-        return this.http.post(`${this.webApiBaseUrl}/SaveTest`, body, options)
+        return this.http.post(`${this.webApiBaseUrl}/Tests`, body, options)
             .map((res: Response) => {
                 if (res) {
                     if (res.status === 200) {
@@ -38,12 +42,14 @@ export class AdminPageService {
     addNewDrug(testData: any) {
         console.log('saveTestData service invoked');
 
-        let headers = new Headers({ 'Content-Type': 'application/json ; charset=utf-8' });
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json ; charset=utf-8');
+        headers.append('Authorization', `${this.authHeader}`);
         let options = new RequestOptions({ headers: headers });
         let body = JSON.stringify(testData);
         console.log(body);
 
-        return this.http.post(`${this.webApiBaseUrl}/SaveDrug`, body, options)
+        return this.http.post(`${this.webApiBaseUrl}/Drugs`, body, options)
             .map((res: Response) => {
                 if (res) {
                     if (res.status === 200) {
@@ -61,12 +67,15 @@ export class AdminPageService {
     addNewHeader(headerData: any) {
         console.log('addNewHeader service invoked');
 
-        let headers = new Headers({ 'Content-Type': 'application/json ; charset=utf-8' });
+        //let headers = new Headers({ 'Content-Type': 'application/json ; charset=utf-8' });
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json ; charset=utf-8');
+        headers.append('Authorization', `${this.authHeader}`);
         let options = new RequestOptions({ headers: headers });
         let body = JSON.stringify(headerData);
         console.log(body);
 
-        return this.http.post(`${this.webApiBaseUrl}/SaveHeader`, body, options)
+        return this.http.post(`${this.webApiBaseUrl}/Letterheads`, body, options)
             .map((res: Response) => {
                 if (res) {
                     if (res.status === 200) {
@@ -83,31 +92,27 @@ export class AdminPageService {
 
     getAllTests() {
         console.log('getAllTests service invoked');
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json ; charset=utf-8');
+        headers.append('Authorization', `${this.authHeader}`);
+        let options = new RequestOptions({ headers: headers });
 
-        return this.http.get(`${this.webApiBaseUrl}/GetTestList`)
+        return this.http.get(`${this.webApiBaseUrl}/Tests`, options)
             .map(res => res.json())
             .catch(error => {
                 console.log(error);
                 return Observable.throw(error);
             });
     }
-    
-    //getAllDrugs(): any {
-    //    console.log('getAllDrugs service invoked');
-       
-    //    return this.http.get(`${this.webApiBaseUrl}/GetDrugList`)
-    //        .map(res => {                               
-    //            console.log(res.json());
-    //            return res.json();
-    //        })
-    //        .catch(error => {
-    //            console.log(error);
-    //            return Observable.throw(error);
-    //        });                
-    //}   
-
+        
     getAllDrugs(): Promise<any> {
-        return this.http.get(`${this.webApiBaseUrl}/GetDrugList`)
+
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json ; charset=utf-8');
+        headers.append('Authorization', `${this.authHeader}`);
+        let options = new RequestOptions({ headers: headers });
+
+        return this.http.get(`${this.webApiBaseUrl}/Drugs`, options)
             .toPromise()
             .then(response => response.json())
             .catch(this.handleServerError);
@@ -116,7 +121,12 @@ export class AdminPageService {
     getAllHeaders() {
         console.log('getAllHeaders service invoked');
 
-        return this.http.get(`${this.webApiBaseUrl}/GetHeaderList`)
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json ; charset=utf-8');
+        headers.append('Authorization', `${this.authHeader}`);
+        let options = new RequestOptions({ headers: headers });
+
+        return this.http.get(`${this.webApiBaseUrl}/Letterheads`, options)
             .map(res => res.json())
             .catch(error => {
                 console.log(error);
@@ -124,35 +134,28 @@ export class AdminPageService {
             });
     }     
 
-    deleteDrug(drug: any) {
-        console.log('deleteDrug service invoked');
+    deleteDrug(drugName: string) {
+        console.log('deleteDrug service invoked');      
 
-        let headers = new Headers({ 'Content-Type': 'application/json ; charset=utf-8' });        
-        let body = JSON.stringify(drug);
-        let options = new RequestOptions({
-            headers: headers,
-            body: body
-        });        
-        console.log(body);
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json ; charset=utf-8');
+        headers.append('Authorization', `${this.authHeader}`);
+        let options = new RequestOptions({ headers: headers });                
 
-        return this.http.delete(`${this.webApiBaseUrl}/DeleteDrug`, options)            
+        return this.http.delete(`${this.webApiBaseUrl}/Drugs/${drugName}`, options)            
             .subscribe((res: Response) => {
                 console.log(res);                
             })            
     }    
 
-    deleteTest(test: any) {
+    deleteTest(testName: string) {
         console.log('deleteTest service invoked');
-
-        let headers = new Headers({ 'Content-Type': 'application/json ; charset=utf-8' });
-        let body = JSON.stringify(test);
-        let options = new RequestOptions({
-            headers: headers,
-            body: body
-        });
-        console.log(body);
-
-        return this.http.delete(`${this.webApiBaseUrl}/DeleteTest`, options)
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json ; charset=utf-8');
+        headers.append('Authorization', `${this.authHeader}`);
+        let options = new RequestOptions({ headers: headers });
+        
+        return this.http.delete(`${this.webApiBaseUrl}/Tests/${testName}`, options)
             .subscribe((res: Response) => {
                 console.log(res);
             })
@@ -160,16 +163,12 @@ export class AdminPageService {
 
     deleteHeader(headerName: any) {
         console.log('deleteHeader service invoked');
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json ; charset=utf-8');
+        headers.append('Authorization', `${this.authHeader}`);
+        let options = new RequestOptions({ headers: headers });
 
-        let headers = new Headers({ 'Content-Type': 'application/json ; charset=utf-8' });
-        let body = JSON.stringify(headerName);
-        let options = new RequestOptions({
-            headers: headers,
-            body: body
-        });
-        console.log(body);
-
-        return this.http.delete(`${this.webApiBaseUrl}/DeleteHeader`, options)
+        return this.http.delete(`${this.webApiBaseUrl}/Letterheads/${headerName}`, options)
             .subscribe((res: Response) => {
                 console.log(res);
             })
@@ -180,5 +179,21 @@ export class AdminPageService {
         console.error("An error occurred : " + error);
         return Observable.throw(error || 'Server error');
     }
-      
+
+    //deleteTest(test: any) {
+    //    console.log('deleteTest service invoked');
+
+    //    let headers = new Headers({ 'Content-Type': 'application/json ; charset=utf-8' });
+    //    let body = JSON.stringify(test);
+    //    let options = new RequestOptions({
+    //        headers: headers,
+    //        body: body
+    //    });
+    //    console.log(body);
+
+    //    return this.http.delete(`${this.webApiBaseUrl}/DeleteTest`, options)
+    //        .subscribe((res: Response) => {
+    //            console.log(res);
+    //        })
+    //}      
 }

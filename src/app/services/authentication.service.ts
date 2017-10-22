@@ -2,12 +2,19 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, Response, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map'
-import { User } from '../models/index'
+import { User } from '../models/index';
+import * as config from '../config/appSettings.json';
 
 @Injectable()
 export class AuthenticationService {
-    public static loginSuccess: boolean = false;
-    constructor(private http: Http) { }    
+    public static loginSuccess: boolean = false;  
+    public auth0Url: any = config['auth0Url'];
+    public clientId: any = config['clientID'];
+    public clientSecret: any = config['clientSecret'];
+    
+    constructor(private http: Http) {        
+        console.log(this.auth0Url);
+    }    
 
     logout() {
         // remove user from session storage to log user out
@@ -39,11 +46,12 @@ export class AuthenticationService {
         let body = JSON.stringify({
             grant_type: "password", username: email, password: password, audience: "https://api.preskriptor.com",
             scope: "openid",
-            client_id: "1EH1COBONWikQYptgWhMJ2iVJnDuqhWk",
-            client_secret: "YOR2gZ0visHgVrScNmTfSDMWq8VpWn9k51vgnP3v36H1HMc5saKCsFq2plzpxC2i"
+            client_id: this.clientId,
+            client_secret: this.clientSecret
         });
 
-        return this.http.post('https://ritwikroy7.auth0.com/oauth/token', body , options).toPromise()
+        //return this.http.post('https://ritwikroy7.auth0.com/oauth/token', body , options).toPromise()
+        return this.http.post(this.auth0Url, body, options).toPromise()
             .then(function (response) {
                 var result = response.json();
                 if (response.status === 200) {

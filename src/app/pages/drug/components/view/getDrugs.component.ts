@@ -4,7 +4,6 @@ import { AdminPageService } from '../../../../services/index';
 import { Drug } from '../../../../models/index';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
-
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/observable/of';
 import 'rxjs/add/operator/share';
@@ -33,12 +32,12 @@ export class GetDrugComponent implements OnInit{
             confirmDelete: true
         },
         columns: {            
-            TradeName: {
+            tradeName: {
                 title: 'Drug Name',
                 type: 'string',                
                 sort: true                
             },
-            Composition: {
+            composition: {
                 title: 'Composition',
                 type: 'string',
                 sort: true                
