@@ -1,4 +1,4 @@
-<form [formGroup]="testForm" class="form-horizontal" (ngSumit)="onSubmit(testForm)">    
+<form [formGroup]="testForm" class="form-horizontal">    
         
     <!--success,info,warning,danger-->
     <ngbd-alert-closeable class="row" *ngIf="isSuccess == 1" [alertType]="'success'" [alertMessage]="'Test Details saved successfully!'"></ngbd-alert-closeable>

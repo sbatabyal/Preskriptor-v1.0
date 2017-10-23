@@ -409,32 +409,7 @@ export class PrescriptionFormComponent implements OnInit {
             }
         )        
     }
-
-    public getSearchResults1() {    
-        this.isExistingPatient = 1;
-        console.log("SearchInput : " + this.searchInput);
-        this.SearchPatientByName(this.searchInput);  
-        //this.hasLoaded = 0;      
-
-        //setTimeout(() => {
-            if (this.data) {
-                if (this.data.length == 1) {
-                    /*Populate Form directly*/
-                    this.existingPatientId = this.data[0].patientID;
-                    this.getPatientPrescriptionById(this.data[0].patientID);
-                }
-                else {
-                    console.log('In Else : ' + this.data)
-                    console.log(this.data);
-                    setTimeout(() => {
-                        this.modal.open('lg');
-                    }, 1000);  
-                }
-            }
-        //}, 800);                        
-                                                           
-    }    
-
+   
     public getSearchResults() {
         this.isExistingPatient = 1;
         console.log("SearchInput : " + this.searchInput);
