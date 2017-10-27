@@ -174,8 +174,10 @@ export class PrescriptionFormComponent implements OnInit {
         }
         if (name === 'medications') {                        
             return this.fb.group({
-                drugName: ['', Validators.required],
-                dosage:['', Validators.required]
+                //drugName: ['', Validators.required],
+                //dosage:['', Validators.required]
+                drugName: [],
+                dosage: []
             });
         }
     }
@@ -234,7 +236,7 @@ export class PrescriptionFormComponent implements OnInit {
           //savePresrescriptionModel = parsedFormData;                                                                                                                  
           this.prescriptionService.SaveAndPrintPrescription(savePresrescriptionModel).subscribe(
 
-              data => {                  
+              data => {                             
                   var fileURL = URL.createObjectURL(data);                  
                   window.open(fileURL);
               },
@@ -246,6 +248,8 @@ export class PrescriptionFormComponent implements OnInit {
               () => {
                   this.isSuccess = 1;
                   this.prescriptionForm.reset();
+                  this.isExistingPatient = 0;
+                  this.existingPatientId = null;
                   console.log("Prescription saved successfully.");
                   document.body.scrollTop = 0;
               }
@@ -269,18 +273,20 @@ export class PrescriptionFormComponent implements OnInit {
         pres.patientInfo.bloodGroup = formData["bloodGroup"];
         pres.patientInfo.email = formData["email"];
         pres.patientInfo.parity = formData["parity"];
-        pres.patientInfo.phone = formData["phone"];
+        pres.patientInfo.contactNumber = formData["phone"];
         pres.patientInfo.title = formData["title"];
-        pres.patientInfo.patientName = formData["_name"];
+        pres.patientInfo.patientName = formData["_name"];        
         pres.prescriptionDate = new Date().toLocaleDateString();
 
         if (this.isExistingPatient == 1)
         {
-            pres.prescriptionID = this.existingPatientId;            
+            pres.prescriptionID = this.existingPatientId;    
+            pres.patientInfo.patientID = this.existingPatientId;        
         }
         else
         {
             pres.prescriptionID = null;
+            pres.patientInfo.patientID = null;
         }   
 
         pres.letterhead = new Letterhead('');
@@ -366,6 +372,8 @@ export class PrescriptionFormComponent implements OnInit {
         console.log('Save Prescription Model:')                  
         console.log(pres);
         console.log(JSON.stringify(pres));
+        this.isExistingPatient = 0;
+        this.existingPatientId = null;
         return pres;
     }    
 
@@ -411,24 +419,25 @@ export class PrescriptionFormComponent implements OnInit {
     }
    
     public getSearchResults() {
-        this.isExistingPatient = 1;
-        console.log("SearchInput : " + this.searchInput);
-        this.SearchPatientByName(this.searchInput).subscribe
-            (res => {
-                if (this.data.length == 1)
-                {
-                    this.existingPatientId = this.data[0].patientID;
-                    this.getPatientPrescriptionById(this.data[0].patientID);
-                }
-                else
-                {
-                    console.log('In Else : ' + this.data)
-                    console.log(this.data);
-                    this.modal.open('lg');
-                }                
-            },
-            () => {               
-            });                     
+        if (this.searchInput){
+            this.isExistingPatient = 1;
+            console.log("SearchInput : " + this.searchInput);
+            this.SearchPatientByName(this.searchInput).subscribe
+                (res => {
+                    if (this.data.length == 1) {
+                        this.existingPatientId = this.data[0].patientID;
+                        this.getPatientPrescriptionById(this.data[0].patientID);
+                    }
+                    else {
+                        console.log('In Else : ' + this.data)
+                        console.log(this.data);
+                        this.modal.open('lg');
+                    }
+                },
+                () => {
+                        
+                });
+        }                    
     }    
 
     getPatientNamesFromCache(): any {
@@ -530,7 +539,7 @@ export class PrescriptionFormComponent implements OnInit {
         //console.log("Row Value : ", item);
         this.selectedPatient = item;
         console.log("Selected Val : ", this.selectedPatient);
-        this.existingPatientId = item.PatientID;        
+        this.existingPatientId = item.patientID;        
         //this.modal.close();
 
         return this.selectedRow;
@@ -631,7 +640,7 @@ export class PrescriptionFormComponent implements OnInit {
         this.prescriptionForm.controls['age'].setValue(this.prescriptionModel.patientInfo.age);
         this.prescriptionForm.controls['parity'].setValue(this.prescriptionModel.patientInfo.parity);
         this.prescriptionForm.controls['bloodGroup'].setValue(this.prescriptionModel.patientInfo.bloodGroup);
-        this.prescriptionForm.controls['phone'].setValue(this.prescriptionModel.patientInfo.phone);
+        this.prescriptionForm.controls['phone'].setValue(this.prescriptionModel.patientInfo.contactNumber);
         this.prescriptionForm.controls['email'].setValue(this.prescriptionModel.patientInfo.email);        
 
         //Investigations :-

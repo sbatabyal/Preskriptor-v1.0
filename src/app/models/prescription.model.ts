@@ -96,7 +96,7 @@ export class Patient {
             this.bloodGroup = json.BloodGroup;
             this.email = json.Email;
             this.patientName = json.patientName ;
-            this.phone = json.ContactNumber;
+            this.contactNumber = json.ContactNumber;
             this.title = json.Title;
             this.parity = json.Parity;            
         }
