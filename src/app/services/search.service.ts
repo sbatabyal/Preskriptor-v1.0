@@ -25,7 +25,7 @@ export class SearchService {
 
         return this.http.get(`${this.webApiBaseUrl}/Patients/Search/${name}`, options)
            //return this.http.get('assets/data.json')
-            .map(res => res.json())
+            .map(res => res)
             .catch(error => {
                 console.log(error);
                 return Observable.throw(error);

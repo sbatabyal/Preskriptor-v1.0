@@ -25,6 +25,7 @@ export class PrescriptionFormComponent implements OnInit {
     public testCache = [];    
     public drugCache = [];
     public isSuccess: number = 0;
+    public patientFound: number = 0;
     public isExistingPatient: number = 0; // Yes = 1, No = -1
     public isPatientInfoOpened: boolean = false; 
     public isInvestigationsOpened: boolean = false; 
@@ -212,13 +213,15 @@ export class PrescriptionFormComponent implements OnInit {
             err => {
                 this.isSuccess = -1;
                 console.log("Error occurred while saving Prescription : " + err);
-                document.body.scrollTop = 0;
+                //document.body.scrollTop = 0;
+                window.scrollTo(0, 0);
             },
             () => {
                 this.isSuccess = 1;
                 this.prescriptionForm.reset();
                 console.log("Prescription saved successfully.");
-                document.body.scrollTop = 0;
+                //document.body.scrollTop = 0;
+                window.scrollTo(0,0);
             }
         )
         console.log(savePresrescriptionModel, isValid);
@@ -242,16 +245,16 @@ export class PrescriptionFormComponent implements OnInit {
               },
               err => {
                   this.isSuccess = -1;
-                  console.log("Error occurred while saving Prescription : " + err);
-                  document.body.scrollTop = 0;
+                  console.log("Error occurred while saving Prescription : " + err);                  
+                  window.scrollTo(0, 0);
               },
               () => {
                   this.isSuccess = 1;
                   this.prescriptionForm.reset();
                   this.isExistingPatient = 0;
                   this.existingPatientId = null;
-                  console.log("Prescription saved successfully.");
-                  document.body.scrollTop = 0;
+                  console.log("Prescription saved successfully.");                  
+                  window.scrollTo(0, 0);
               }
           )
           console.log(savePresrescriptionModel, isValid);
@@ -409,13 +412,22 @@ export class PrescriptionFormComponent implements OnInit {
     //}
 
     SearchPatientByName(name: string) {
-
+        this.patientFound = 0;
         return this.searchService.SearchPatientsByName(name).map(
-            res => {
-                this.data = res;
-                console.log(this.data);                                                        
+            res => {                
+                if (res.status === 200) {
+                    this.data = res.json();
+                    console.log(this.data);
+                }
+            }                                                              
+        ).catch(error => {
+            console.log(error);
+            if (error.status === 404) {
+                this.patientFound = -1;
             }
-        )        
+            this.prescriptionForm.reset();
+            return Observable.throw(error);
+            });      
     }
    
     public getSearchResults() {

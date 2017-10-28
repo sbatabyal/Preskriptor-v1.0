@@ -5,6 +5,7 @@
     <ngbd-alert-closeable class="row" *ngIf="isSuccess == -1" [alertType]="'danger'" [alertMessage]="'Failed to save Prescription. Please try again.'"></ngbd-alert-closeable>    
     
     <ba-card title="Search Patient">
+        <ngbd-alert-closeable class="row" *ngIf="patientFound == -1" [alertType]="'danger'" [alertMessage]="'No Patient(s) found for the Patient Name entered'"></ngbd-alert-closeable>
         <div class="row">
             <div class="form-group search col-sm-9" *ngIf="patientNamesCache">
                 <ng2-completer [(ngModel)]="searchInput" [datasource]="patientNamesCache" [minSearchLength]="1" [placeholder]="'Search Patients By Name'" [inputClass]="['form-control']" [matchClass]="['cc-dropdown', 'searchMatch']" [formControlName]="'search'"></ng2-completer>
