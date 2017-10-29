@@ -81,7 +81,7 @@
                 <div class="panel panel-default" id="panelHeader">
                     <div class="panel-heading" data-toggle="collapse" data-target="#header">
                         <h5 class="panel-title">
-                            <span class="fa fa-server"></span> Header
+                            <span class="fa fa-server"></span> Letter Head
                         </h5>
 
                     </div>
@@ -90,9 +90,9 @@
                             <!--Select a Header-->
                             <ba-card>
                                 <div class="form-group">
-                                    <div class="control-group">
-                                        <label class="control-label">Select Chamber For Prescription Header</label>
+                                    <div class="control-group">                                        
                                         <div class="form-group">
+                                            <label class="control-label" style="font-size:14px;">Select Chamber For Prescription Letter Head</label>
                                             <select class="form-control" id="selectHeader" formControlName="chamberSelect">
                                                 <option *ngFor="let item of chamberNames" [value]="item">{{item}}</option>
                                             </select>
@@ -199,10 +199,10 @@
                                 <div class="row form-group">
                                     <div class="col-sm-12">
                                         <a (click)="addInput('chiefComplaints')" style="cursor:default;" class="fa fa-plus-square">
-                                            <span style="font-family: Arial; margin-top: 10px;">Add More</span>
+                                            <span style="font-family: Arial; margin-top: 10px;"> Add More </span>
                                         </a>
                                         <a (click)="removeInput('chiefComplaints')" style="cursor:default;" class="fa fa-minus-square">
-                                            <span style="font-family: Arial; margin-top: 10px;">Remove</span>
+                                            <span style="font-family: Arial; margin-top: 10px;"> Remove </span>
                                         </a>
                                     </div>
                                 </div>
@@ -221,10 +221,10 @@
                                 <div class="row form-group">
                                     <div class="col-sm-12">
                                         <a (click)="addInput('personalHistory')" style="cursor:default;" class="fa fa-plus-square">
-                                            <span style="font-family: Arial; margin-top: 10px;">Add More</span>
+                                            <span style="font-family: Arial; margin-top: 10px;"> Add More </span>
                                         </a>
                                         <a (click)="removeInput('personalHistory')" style="cursor:default;" class="fa fa-minus-square">
-                                            <span style="font-family: Arial; margin-top: 10px;">Remove</span>
+                                            <span style="font-family: Arial; margin-top: 10px;"> Remove </span>
                                         </a>
                                     </div>
                                 </div>
@@ -243,10 +243,10 @@
                                 <div class="row form-group">
                                     <div class="col-sm-12">
                                         <a (click)="addInput('familyHistory')" style="cursor:default;" class="fa fa-plus-square">
-                                            <span style="font-family: Arial; margin-top: 10px;">Add More</span>
+                                            <span style="font-family: Arial; margin-top: 10px;"> Add More </span>
                                         </a>
                                         <a (click)="removeInput('familyHistory')" style="cursor:default;" class="fa fa-minus-square">
-                                            <span style="font-family: Arial; margin-top: 10px;">Remove</span>
+                                            <span style="font-family: Arial; margin-top: 10px;"> Remove </span>
                                         </a>
                                     </div>
                                 </div>
@@ -265,10 +265,10 @@
                                 <div class="row form-group">
                                     <div class="col-sm-12">
                                         <a (click)="addInput('examinations')" style="cursor:default;" class="fa fa-plus-square">
-                                            <span style="font-family: Arial; margin-top: 10px;">Add More</span>
+                                            <span style="font-family: Arial; margin-top: 10px;"> Add More </span>
                                         </a>
                                         <a (click)="removeInput('examinations')" style="cursor:default;" class="fa fa-minus-square">
-                                            <span style="font-family: Arial; margin-top: 10px;">Remove</span>
+                                            <span style="font-family: Arial; margin-top: 10px;"> Remove </span>
                                         </a>
                                     </div>
                                 </div>
@@ -287,10 +287,10 @@
                                 <div class="row form-group">
                                     <div class="col-sm-12">
                                         <a (click)="addInput('additionalFindings')" style="cursor:default;" class="fa fa-plus-square">
-                                            <span style="font-family: Arial; margin-top: 10px;">Add More</span>
+                                            <span style="font-family: Arial; margin-top: 10px;"> Add More </span>
                                         </a>
                                         <a (click)="removeInput('additionalFindings')" style="cursor:default;" class="fa fa-minus-square">
-                                            <span style="font-family: Arial; margin-top: 10px;">Remove</span>
+                                            <span style="font-family: Arial; margin-top: 10px;"> Remove </span>
                                         </a>
                                     </div>
                                 </div>
@@ -325,10 +325,10 @@
                                 <div class="row form-group">
                                     <div class="col-sm-12">
                                         <a (click)="addInput('testTypes')" style="cursor:default;" class="fa fa-plus-square">
-                                            <span style="font-family: Arial; margin-top: 10px;">Add More</span>
+                                            <span style="font-family: Arial; margin-top: 10px;"> Add More </span>
                                         </a>
                                         <a (click)="removeInput('testTypes')" style="cursor:default;" class="fa fa-minus-square">
-                                            <span style="font-family: Arial; margin-top: 10px;">Remove</span>
+                                            <span style="font-family: Arial; margin-top: 10px;"> Remove </span>
                                         </a>
                                     </div>
                                 </div>
@@ -372,10 +372,10 @@
                                 <div class="row form-group" style="margin-top:10px;">
                                     <div class="col-sm-12">
                                         <a (click)="addInput('medications')" style="cursor:default;" class="fa fa-plus-square">
-                                            <span style="font-family: Arial; margin-top: 10px;">Add More</span>
+                                            <span style="font-family: Arial; margin-top: 10px;"> Add More </span>
                                         </a>
                                         <a (click)="removeInput('medications')" style="cursor:default;" class="fa fa-minus-square">
-                                            <span style="font-family: Arial; margin-top: 10px;">Remove</span>
+                                            <span style="font-family: Arial; margin-top: 10px;"> Remove </span>
                                         </a>
                                     </div>
                                 </div>
@@ -408,10 +408,10 @@
                                 <div class="row form-group">
                                     <div class="col-sm-12">
                                         <a (click)="addInput('followUp')" style="cursor:default;" class="fa fa-plus-square">
-                                            <span style="font-family: Arial; margin-top: 10px;">Add More</span>
+                                            <span style="font-family: Arial; margin-top: 10px;"> Add More </span>
                                         </a>
                                         <a (click)="removeInput('followUp')" style="cursor:default;" class="fa fa-minus-square">
-                                            <span style="font-family: Arial; margin-top: 10px;">Remove</span>
+                                            <span style="font-family: Arial; margin-top: 10px;"> Remove </span>
                                         </a>
                                     </div>
                                 </div>
@@ -430,10 +430,10 @@
                                 <div class="row form-group">
                                     <div class="col-sm-12">
                                         <a (click)="addInput('patientResponse')" style="cursor:default;" class="fa fa-plus-square">
-                                            <span style="font-family: Arial; margin-top: 10px;">Add More</span>
+                                            <span style="font-family: Arial; margin-top: 10px;"> Add More </span>
                                         </a>
                                         <a (click)="removeInput('patientResponse')" style="cursor:default;" class="fa fa-minus-square">
-                                            <span style="font-family: Arial; margin-top: 10px;">Remove</span>
+                                            <span style="font-family: Arial; margin-top: 10px;"> Remove </span>
                                         </a>
                                     </div>
                                 </div>

@@ -250,7 +250,7 @@ export class PrescriptionFormComponent implements OnInit {
               },
               () => {
                   this.isSuccess = 1;
-                  this.prescriptionForm.reset();
+                  //this.prescriptionForm.reset();
                   this.isExistingPatient = 0;
                   this.existingPatientId = null;
                   console.log("Prescription saved successfully.");                  

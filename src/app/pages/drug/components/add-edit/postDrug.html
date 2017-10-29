@@ -34,10 +34,10 @@
                     <div class="row form-group">
                         <div class="col-sm-12">
                             <a (click)="addInput()" style="cursor:default;" class="fa fa-plus-square">
-                                <span class="fa-custom-font">Add More</span>
+                                <span class="fa-custom-font"> Add More </span>
                             </a>
                             <a (click)="removeInput()" style="cursor:default;" class="fa fa-minus-square">
-                                <span class="fa-custom-font">Remove</span>
+                                <span class="fa-custom-font"> Remove </span>
                             </a>
                         </div>
                     </div>
@@ -46,8 +46,7 @@
 
                 <div class="row form-group">
                     <div class="col-sm-12 text-center">
-                        <button type="submit" (click)="SaveDrug(drugForm.value, drugForm.valid)" class="btn btn-success btn-md center-block" Style="width: 100px; margin-right :5px;" [disabled]="!drugForm.valid">Save</button>
-                        <!--<button type="submit" class="btn btn-success btn-md center-block" Style="width: 100px; margin-right :5px;">Save</button>-->
+                        <button type="submit" (click)="SaveDrug(drugForm.value, drugForm.valid)" class="btn btn-success btn-md center-block" Style="width: 100px; margin-right :5px;" [disabled]="!drugForm.valid">Save</button>                        
                         <button type="button" (click)="Reset()" class="btn btn-warning btn-md center-block" Style="width: 100px; margin-left :5px;">Reset</button>
                     </div>
                 </div>

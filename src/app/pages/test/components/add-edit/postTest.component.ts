@@ -81,13 +81,12 @@ export class PostTestComponent implements OnInit{
                 console.log(data);                
             },
             err => {
-                this.isSuccess = -1;      
-                //this.testForm.reset();          
+                this.isSuccess = -1;                      
                 console.log("Error occurred while saving Test Data : " + err);
             },
             () => {
                 this.isSuccess = 1;    
-                this.testForm.reset();           
+                //this.testForm.reset();           
                 console.log("Test Data saved successfully.");
             }
         )          

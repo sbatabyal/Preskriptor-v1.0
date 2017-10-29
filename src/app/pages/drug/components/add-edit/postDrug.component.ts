@@ -66,13 +66,12 @@ export class PostDrugComponent implements OnInit {
                 console.log(data);
             },
             err => {
-                this.isSuccess = -1;
-                //this.drugForm.reset();          
+                this.isSuccess = -1;                      
                 console.log("Error occurred while saving Drug Data : " + err);
             },
             () => {
                 this.isSuccess = 1;
-                this.drugForm.reset();
+                //this.drugForm.reset();
                 console.log("Drug Data saved successfully.");
             }
         )

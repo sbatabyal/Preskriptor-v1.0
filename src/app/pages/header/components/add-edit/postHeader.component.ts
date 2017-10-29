@@ -58,13 +58,12 @@ export class PostHeaderComponent implements OnInit{
                 console.log(data);
             },
             err => {
-                this.isSuccess = -1;
-                //this.drugForm.reset();          
+                this.isSuccess = -1;                        
                 console.log("Error occurred while saving Header Data : " + err);
             },
             () => {
                 this.isSuccess = 1;
-                this.addHeaderForm.reset();
+                //this.addHeaderForm.reset();
                 console.log("Header Data saved successfully.");
             }
         )
