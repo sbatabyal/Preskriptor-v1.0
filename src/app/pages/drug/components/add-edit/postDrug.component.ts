@@ -96,6 +96,7 @@ export class PostDrugComponent implements OnInit {
 
     Reset() {
         this.drugForm.reset();
+        this.isSuccess = 0;
     }
 
     patchValuesToDynamicInput() {

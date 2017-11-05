@@ -21,17 +21,14 @@ export class PrescriptionFormComponent implements OnInit {
     public prescriptionForm: FormGroup; // model driven form   
     public submitted: boolean = false; // keep track on whether form is submitted    
     protected names = [];
-    public patientsCache = [];// this.getExistingPatientNames();
+    public patientsCache = [];
     public testCache = [];    
     public drugCache = [];
     public isSuccess: number = 0;
     public patientFound: number = 0;
     public isExistingPatient: number = 0; // Yes = 1, No = -1
-    public isPatientInfoOpened: boolean = false; 
-    public isInvestigationsOpened: boolean = false; 
-    public isTestsOpened: boolean = false; 
-    public isMedicationsOpened: boolean = false; 
-    public isMiscOpened: boolean = false; 
+    public isPanelLetterHeadOpen: boolean = false;     
+    public isPatientInfoOpened: boolean = false;   
     public loading: string; 
     public chamberNames = [];       
        
@@ -42,10 +39,8 @@ export class PrescriptionFormComponent implements OnInit {
     animation: boolean = true;
     keyboard: boolean = true;
     backdrop: string | boolean = true;
-    css: boolean = false;
-    items: string[] = ['item1', 'item2', 'item3'];
-    selected: string;
-    output: string;
+    css: boolean = false;    
+    selected: string;    
     searchInput: any;
     selectedRow: Number;    
 
@@ -364,9 +359,7 @@ export class PrescriptionFormComponent implements OnInit {
             var medicine = new Medication('');                   
             if (formData["medications"][i]) {                               
                 medicine.tradeName = formData["medications"][i]["drugName"];
-                medicine.dosage = formData["medications"][i]["dosage"];      
-                       
-                //var drug = this.drugs.filter(item => item.tradeName == medicine.tradeName)[0];                                                    
+                medicine.dosage = formData["medications"][i]["dosage"];                                                                                           
                 medicine.composition = null;
                 pres.medications.push(medicine);                   
             }
@@ -390,27 +383,7 @@ export class PrescriptionFormComponent implements OnInit {
         this.modal.close();
         this.selectedRow = -1;
     }
-
-    //SearchPatientByName(name: string): any {
-
-    //    this.searchService.SearchPatientsByName(name).subscribe(
-
-    //        data => {
-
-    //            this.data = data;
-    //            console.log(this.data);
-    //            return this.data;
-    //        },
-    //        err => {
-    //            console.log("Error while retrieving Patient Details : " + err);
-    //        },
-    //        () => {
-    //            console.log("Patient Details retrieved successfully.");
-    //        }
-    //    )
-    //    return this.data;
-    //}
-
+   
     SearchPatientByName(name: string) {
         this.patientFound = 0;
         return this.searchService.SearchPatientsByName(name).map(
@@ -762,45 +735,31 @@ export class PrescriptionFormComponent implements OnInit {
                 patientResponse.push(this.patchMiscellaneous('patientResponse', item));
             }
         }
-        //Expand Panels : 
-
-        this.isPatientInfoOpened = false;
-        this.toggle();        
-
-        
+        //Expand Panel : 
+        this.isPanelLetterHeadOpen = false;
+        this.toggleLetterHead();
+        this.isPatientInfoOpened = false;   
+        this.togglePatientInfo();             
     }
 
     ResetForm() {
         this.prescriptionForm.reset();
+        this.isExistingPatient = 0;
+        this.isPanelLetterHeadOpen = false;
+        this.isPatientInfoOpened = false;
+        this.isSuccess = 0;
+        this.patientFound = 0;
+        this.searchInput = null;
+        this.selectedPatient = null;
+        this.selectedRow = -1;
+        this.existingPatientId = null;
+    }    
+
+    toggleLetterHead() {        
+        this.isPanelLetterHeadOpen = !this.isPanelLetterHeadOpen;                    
     }
-
-    newGuid() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
-    }
-
-    toggle() {        
-        this.isPatientInfoOpened = !this.isPatientInfoOpened;                    
-    }
-    
-    //getAllDrugs(): any {
-    //    this.adminPageService.getAllDrugs().subscribe(
-
-    //        res => {
-    //            this.drugs = res;
-    //            console.log(res);
-    //            return res;
-    //        },
-    //        err => {
-    //            console.log("Error while retrieving existing Drug Details : " + err);
-    //        },
-    //        () => {
-    //            console.log("Existing Drug Details retrieved successfully.");
-    //        }
-    //    )
-    //}
-
+    togglePatientInfo() {
+        this.isPatientInfoOpened = !this.isPatientInfoOpened;
+    }    
 }
 

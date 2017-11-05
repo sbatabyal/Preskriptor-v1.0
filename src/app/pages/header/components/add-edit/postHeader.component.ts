@@ -92,6 +92,7 @@ export class PostHeaderComponent implements OnInit{
 
     Reset() {
         this.addHeaderForm.reset();
+        this.isSuccess = 0;        
     }
     
 }

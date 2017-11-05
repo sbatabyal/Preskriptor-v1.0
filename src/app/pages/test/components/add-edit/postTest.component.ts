@@ -116,6 +116,7 @@ export class PostTestComponent implements OnInit{
 
     Reset() {
         this.testForm.reset();
+        this.isSuccess = 0;
     }
     
 }
