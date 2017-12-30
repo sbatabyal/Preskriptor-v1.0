@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild} from '@angular/core';
+import { Component, OnInit, Input, ViewChild, OnDestroy} from '@angular/core';
 import { FormGroup, AbstractControl, FormBuilder, Validators, NgForm, FormArray } from '@angular/forms';
 import { AdminPageService } from '../../../../services/index';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -10,12 +10,13 @@ import { Letterhead } from '../../../../models/prescription.model';
   styleUrls: ['./postHeader.css'],
   providers: [AdminPageService]
 })
-export class PostHeaderComponent implements OnInit{
+export class PostHeaderComponent implements OnInit, OnDestroy{
     
     public header: Letterhead = new Letterhead('');    
     public static inputCount = 1;
     public addHeaderForm: FormGroup;
-    public isSuccess: number = 0;    
+    public isSuccess: number = 0; 
+    private saveHeaderObs$: any;   
             
     constructor(private fb: FormBuilder,
         private adminService: AdminPageService)
@@ -52,7 +53,7 @@ export class PostHeaderComponent implements OnInit{
         let parsedFormData = this.parseFormJSON(headerInput);
         this.header = new Letterhead(parsedFormData);
 
-        this.adminService.addNewHeader(this.header).subscribe(
+        this.saveHeaderObs$ = this.adminService.addNewHeader(this.header).subscribe(
 
             data => {
                 console.log(data);
@@ -93,6 +94,8 @@ export class PostHeaderComponent implements OnInit{
     Reset() {
         this.addHeaderForm.reset();
         this.isSuccess = 0;        
-    }
-    
+    }   
+    ngOnDestroy() {
+        if (this.saveHeaderObs$) { this.saveHeaderObs$.unsubscribe(); }
+    }  
 }

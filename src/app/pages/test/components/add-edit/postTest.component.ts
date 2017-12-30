@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild} from '@angular/core';
+import { Component, OnInit, Input, ViewChild, OnDestroy} from '@angular/core';
 import { FormGroup, AbstractControl, FormBuilder, Validators, NgForm, FormArray } from '@angular/forms';
 import { AdminPageService } from '../../../../services/index';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -10,12 +10,13 @@ import { Test } from '../../../../models/prescription.model';
   styleUrls: ['./postTest.css'],
   providers: [AdminPageService]
 })
-export class PostTestComponent implements OnInit{
+export class PostTestComponent implements OnInit, OnDestroy{
     
     public test: Test = new Test('');    
     public static inputCount = 1;
     public testForm: FormGroup;
     public isSuccess: number = 0;    
+    private saveTestObs$: any;
         
     @Input() newTest;
     constructor(private fb: FormBuilder,
@@ -75,7 +76,7 @@ export class PostTestComponent implements OnInit{
         this.isSuccess = 0;
         console.log(testInput);         
 
-        this.adminService.addNewTest(testInput).subscribe(
+        this.saveTestObs$ = this.adminService.addNewTest(testInput).subscribe(
 
             data => {                            
                 console.log(data);                
@@ -118,5 +119,8 @@ export class PostTestComponent implements OnInit{
         this.testForm.reset();
         this.isSuccess = 0;
     }
+    ngOnDestroy() {
+        if (this.saveTestObs$) { this.saveTestObs$.unsubscribe(); }
+    }  
     
 }

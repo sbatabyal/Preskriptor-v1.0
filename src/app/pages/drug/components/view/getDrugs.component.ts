@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, NgModule} from '@angular/core';
+import { Component, OnInit, Input, ViewChild, NgModule, OnDestroy} from '@angular/core';
 import { FormGroup, AbstractControl, FormBuilder, Validators, NgForm, FormArray } from '@angular/forms';
 import { AdminPageService } from '../../../../services/index';
 import { Drug } from '../../../../models/index';
@@ -16,12 +16,12 @@ import 'rxjs/add/operator/map';
   providers: [AdminPageService]
 })
 
-export class GetDrugComponent implements OnInit{        
+export class GetDrugComponent implements OnInit, OnDestroy{        
 
     settings = {        
         pager: {
             display: true,
-            perPage: 5
+            perPage: 10
         },
         actions: {
             add: false,
@@ -44,26 +44,19 @@ export class GetDrugComponent implements OnInit{
             }            
         }
     };
-    source: LocalDataSource = new LocalDataSource();    
+    source: LocalDataSource = new LocalDataSource();        
     
     constructor(private fb: FormBuilder,
         private adminService: AdminPageService)
-    {    
-        //this.data = this.getAllDrugs();   
-        this.source.refresh();
-        this.adminService.getAllDrugs().then((data) => {
-            this.source.load(data);
-            //this.tableData = data;
-            console.log(data);
-        });                           
+    {            
+                                
     }
 
     ngOnInit()
     {                                
-        //this.zone.run(() => this.getAllDrugs());
+        this.source.refresh();        
         this.adminService.getAllDrugs().then((data) => {
-            this.source.load(data);
-            //this.tableData = data;
+            this.source.load(data);            
             console.log(data);
         });  
     }             
@@ -103,8 +96,7 @@ export class GetDrugComponent implements OnInit{
     }
 
     ngOnDestroy()
-    {
+    {        
         this.source = null;
-    }
-        
+    }        
 }

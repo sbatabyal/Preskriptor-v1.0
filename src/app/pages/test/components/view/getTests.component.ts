@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, NgModule} from '@angular/core';
+import { Component, OnInit, Input, ViewChild, NgModule, OnDestroy} from '@angular/core';
 import { FormGroup, AbstractControl, FormBuilder, Validators, NgForm, FormArray } from '@angular/forms';
 import { AdminPageService } from '../../../../services/index';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -12,12 +12,12 @@ import { LocalDataSource } from 'ng2-smart-table';
   providers: [AdminPageService]
 })
     
-export class GetTestComponent implements OnInit{
+export class GetTestComponent implements OnInit, OnDestroy{
             
     settings = {        
         pager: {
             display: true,
-            perPage: 5
+            perPage: 10
         },
         actions: {
             add: false,
@@ -35,23 +35,18 @@ export class GetTestComponent implements OnInit{
         }
     };
     source: LocalDataSource = new LocalDataSource();   
-    jsonData: any;   
+    jsonData: any; 
+    private obs$: any;  
           
     constructor(private fb: FormBuilder,
         private adminService: AdminPageService)
-    {
-        this.source.refresh();
-        this.adminService.getAllTests().subscribe((data) => {
-            this.jsonData = this.createTestJSON(data);
-            this.source.load(this.jsonData);   
-            console.log(data);
-        });           
+    {                   
     }
 
     ngOnInit()
     {            
         this.source.refresh();
-        this.adminService.getAllTests().subscribe((data) => {
+        this.obs$ = this.adminService.getAllTests().subscribe((data) => {
             this.jsonData = this.createTestJSON(data);
             this.source.load(this.jsonData);            
             console.log(data);
@@ -87,5 +82,7 @@ export class GetTestComponent implements OnInit{
             event.confirm.reject();
         }
     }
-    
+    ngOnDestroy() {
+        if (this.obs$) { this.obs$.unsubscribe(); }
+    }    
 }

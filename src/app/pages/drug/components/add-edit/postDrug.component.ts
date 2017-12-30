@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { FormGroup, AbstractControl, FormBuilder, Validators, NgForm, FormArray } from '@angular/forms';
 import { AdminPageService } from '../../../../services/index';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -10,12 +10,13 @@ import { Drug } from '../../../../models/prescription.model';
     styleUrls: ['./postDrug.css'],
     providers: [AdminPageService]
 })
-export class PostDrugComponent implements OnInit {
+export class PostDrugComponent implements OnInit, OnDestroy {
 
     public drug: Drug = new Drug('');
     public static inputCount = 1;
     public drugForm: FormGroup;
     public isSuccess: number = 0;
+    private saveDrugObs$: any;
 
     @Input() newDrug;
     constructor(private fb: FormBuilder,
@@ -60,7 +61,7 @@ export class PostDrugComponent implements OnInit {
         let parsedFormData = this.parseFormJSON(drugInput);
         this.drug = new Drug(parsedFormData);
 
-        this.adminService.addNewDrug(this.drug).subscribe(
+        this.saveDrugObs$ = this.adminService.addNewDrug(this.drug).subscribe(
 
             data => {
                 console.log(data);
@@ -114,5 +115,7 @@ export class PostDrugComponent implements OnInit {
             comp: [data]
         });
     }
-
+    ngOnDestroy() {
+        if (this.saveDrugObs$) { this.saveDrugObs$.unsubscribe(); }
+    }  
 }

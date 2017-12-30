@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, NgModule} from '@angular/core';
+import { Component, OnInit, Input, ViewChild, NgModule, OnDestroy} from '@angular/core';
 import { FormGroup, AbstractControl, FormBuilder, Validators, NgForm, FormArray } from '@angular/forms';
 import { AdminPageService } from '../../../../services/index';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -12,7 +12,7 @@ import { LocalDataSource } from 'ng2-smart-table';
   providers: [AdminPageService]
 })
     
-export class GetHeaderComponent implements OnInit{ 
+export class GetHeaderComponent implements OnInit, OnDestroy{ 
 
     public headers: Letterhead[];     
     settings = {
@@ -73,6 +73,7 @@ export class GetHeaderComponent implements OnInit{
     };
     source: LocalDataSource = new LocalDataSource(); 
     jsonData: any;     
+    private obs$: any;
             
     constructor(private fb: FormBuilder,
         private adminService: AdminPageService)
@@ -88,29 +89,13 @@ export class GetHeaderComponent implements OnInit{
     ngOnInit()
     {      
         this.source.refresh();
-        this.adminService.getAllHeaders().subscribe((data) => {
+        this.obs$ = this.adminService.getAllHeaders().subscribe((data) => {
             this.jsonData = this.createChamberJSON(data);
             this.source.load(this.jsonData);
             console.log(data);
         });  
     }
-    
-    //getAllHeaders(): any {
-
-    //    this.adminService.getAllHeaders().subscribe(
-
-    //        data => {                                
-    //            this.headers = data;
-    //        },
-    //        err => {
-    //            console.log("Error while retrieving existing Header Details : " + err);
-    //        },
-    //        () => {
-    //            console.log("Existing Header Details retrieved successfully.");
-    //        }
-    //    )
-    //}    
-
+     
     createChamberJSON(headers: any): any {
 
         var jsonList = [];
@@ -152,5 +137,9 @@ export class GetHeaderComponent implements OnInit{
         } else {
             event.confirm.reject();
         }
+    }
+
+    ngOnDestroy() {
+        if (this.obs$) { this.obs$.unsubscribe(); }
     }
 }

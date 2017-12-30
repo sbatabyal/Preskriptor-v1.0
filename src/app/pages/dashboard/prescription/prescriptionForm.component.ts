@@ -1,4 +1,4 @@
-import { Component, OnInit, NgModule, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, NgModule, ViewChild, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { style, state, animate, transition, trigger } from '@angular/core';
 import { FormGroup, AbstractControl, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { PrescriptionService, AutoCompleteService, SearchService, AdminPageService } from '../../../services/index';
@@ -16,7 +16,7 @@ import * as $ from 'jquery';
 })
 
 
-export class PrescriptionFormComponent implements OnInit {
+export class PrescriptionFormComponent implements OnInit, OnDestroy {
     
     public prescriptionForm: FormGroup; // model driven form   
     public submitted: boolean = false; // keep track on whether form is submitted    
@@ -30,8 +30,16 @@ export class PrescriptionFormComponent implements OnInit {
     public isPanelLetterHeadOpen: boolean = false;     
     public isPatientInfoOpened: boolean = false;   
     public loading: string; 
-    public chamberNames = [];       
-       
+    public chamberNames = []; 
+
+    private getTestsObs$: any;
+    private getDrugsObs$: any;
+    private getPatientNamesObs$: any;
+    private getChambersObs$: any;
+    private getCompositionObs$: any;
+    private getPatientObs$: any;   
+    private getSearchResultsObs$: any;   
+    private savePrescriptionObs$: any;       
 
     @ViewChild('modalSearchResults')
     modal: ModalComponent;
@@ -192,47 +200,44 @@ export class PrescriptionFormComponent implements OnInit {
         control.removeAt(length - 1);
     }
 
-      savePrescription(model: any, isValid: boolean) {        
-        this.isSuccess = 0;
-        this.submitted = true;        
-        //console.log(model);        
+    savePrescription(model: any, isValid: boolean) {        
+    this.isSuccess = 0;
+    this.submitted = true;                    
 
-        let savePresrescriptionModel: Prescription = new Prescription('');
-        let parsedFormData= this.parseFormJSON(model);
-        savePresrescriptionModel = new Prescription(parsedFormData);  
-        //savePresrescriptionModel = parsedFormData;                                                                                                                  
-        this.prescriptionService.savePrescription(savePresrescriptionModel).subscribe(
-            data => {
-                console.log(data);
-            },
-            err => {
-                this.isSuccess = -1;
-                console.log("Error occurred while saving Prescription : " + err);
-                //document.body.scrollTop = 0;
-                window.scrollTo(0, 0);
-            },
-            () => {
-                this.isSuccess = 1;
-                this.prescriptionForm.reset();
-                console.log("Prescription saved successfully.");
-                //document.body.scrollTop = 0;
-                window.scrollTo(0,0);
-            }
-        )
-        console.log(savePresrescriptionModel, isValid);
+    let savePresrescriptionModel: Prescription = new Prescription('');
+    let parsedFormData= this.parseFormJSON(model);
+    savePresrescriptionModel = new Prescription(parsedFormData);  
+                                                                                                                         
+    this.savePrescriptionObs$ = this.prescriptionService.savePrescription(savePresrescriptionModel).subscribe(
+        data => {
+            console.log(data);
+        },
+        err => {
+            this.isSuccess = -1;
+            console.log("Error occurred while saving Prescription : " + err);
+            //document.body.scrollTop = 0;
+            window.scrollTo(0, 0);
+        },
+        () => {
+            this.isSuccess = 1;
+            this.prescriptionForm.reset();
+            console.log("Prescription saved successfully.");
+            //document.body.scrollTop = 0;
+            window.scrollTo(0,0);
+        }
+    )
+    console.log(savePresrescriptionModel, isValid);
             
-    }
+}
 
-      SaveAndPrintPrescription(model: any, isValid: boolean) {
+    SaveAndPrintPrescription(model: any, isValid: boolean) {
           this.isSuccess = 0;
-          this.submitted = true;
-          //console.log(model);        
+          this.submitted = true;               
 
           let savePresrescriptionModel: Prescription = new Prescription('');
           let parsedFormData = this.parseFormJSON(model);
-          savePresrescriptionModel = new Prescription(parsedFormData);
-          //savePresrescriptionModel = parsedFormData;                                                                                                                  
-          this.prescriptionService.SaveAndPrintPrescription(savePresrescriptionModel).subscribe(
+          savePresrescriptionModel = new Prescription(parsedFormData);                                                                                                                 
+          this.savePrescriptionObs$ = this.prescriptionService.SaveAndPrintPrescription(savePresrescriptionModel).subscribe(
 
               data => {                             
                   var fileURL = URL.createObjectURL(data);                  
@@ -407,7 +412,7 @@ export class PrescriptionFormComponent implements OnInit {
         if (this.searchInput){
             this.isExistingPatient = 1;
             console.log("SearchInput : " + this.searchInput);
-            this.SearchPatientByName(this.searchInput).subscribe
+            this.getSearchResultsObs$ = this.SearchPatientByName(this.searchInput).subscribe
                 (res => {
                     if (this.data.length == 1) {
                         this.existingPatientId = this.data[0].patientID;
@@ -426,10 +431,8 @@ export class PrescriptionFormComponent implements OnInit {
     }    
 
     getPatientNamesFromCache(): any {
-        this.autoCompleteService.getPatientNamesFromCache().subscribe(
-
+        this.getPatientNamesObs$ = this.autoCompleteService.getPatientNamesFromCache().subscribe(
             data => {
-
                 this.patientNamesCache = data;
                 console.log(this.patientNamesCache);
             },
@@ -443,10 +446,8 @@ export class PrescriptionFormComponent implements OnInit {
     }
 
     getChamberNames(): any {
-        this.prescriptionService.getChamberNames().subscribe(
-
+        this.getChambersObs$ = this.prescriptionService.getChamberNames().subscribe(
             data => {
-
                 this.chamberNames = data;
                 console.log(this.chamberNames);
             },
@@ -460,10 +461,8 @@ export class PrescriptionFormComponent implements OnInit {
     }
 
     getTestsFromCache(): any {
-        this.autoCompleteService.getAllTestsfromCache().subscribe(
-
+        this.getTestsObs$ = this.autoCompleteService.getAllTestsfromCache().subscribe(
             data => {
-
                 this.testCache = data;     
                 console.log(this.testCache); 
                 return data;          
@@ -478,10 +477,8 @@ export class PrescriptionFormComponent implements OnInit {
     }
 
     getDrugsFromCache(): any {
-        this.autoCompleteService.getAllDrugsfromCache().subscribe(
-
+        this.getDrugsObs$ = this.autoCompleteService.getAllDrugsfromCache().subscribe(
             data => {
-
                 this.drugCache = data;
                 console.log(this.drugCache);
                 return data;
@@ -495,10 +492,9 @@ export class PrescriptionFormComponent implements OnInit {
         )
     }
 
-     getCompositionByDrugName(med: Medication){
+    getCompositionByDrugName(med: Medication){
         var result : string[] = [];
-        this.prescriptionService.getCompositionByDrugName(med.tradeName).subscribe(
-
+        this.getCompositionObs$ = this.prescriptionService.getCompositionByDrugName(med.tradeName).subscribe(
             data => {  
                 //console.log(data); 
                 result = data; 
@@ -520,8 +516,7 @@ export class PrescriptionFormComponent implements OnInit {
 
     public getSelectedRow(item: any, index: number) : any {
         this.selectedRow = index;
-        console.log("Selected Row Index : " + this.selectedRow);
-        //console.log("Row Value : ", item);
+        console.log("Selected Row Index : " + this.selectedRow);        
         this.selectedPatient = item;
         console.log("Selected Val : ", this.selectedPatient);
         this.existingPatientId = item.patientID;        
@@ -533,11 +528,8 @@ export class PrescriptionFormComponent implements OnInit {
     getPatientPrescriptionById(id :any)
     {            
         //var response: any;
-        this.prescriptionService.getPatientPrescription(id).subscribe(
-
-            data => {
-
-                //.hasLoaded = false;
+        this.getPatientObs$ = this.prescriptionService.getPatientPrescription(id).subscribe(
+            data => {                
                 console.log(data);               
                 this.prescriptionModel = new Prescription(data);                
                 console.log('Get Model:');
@@ -619,6 +611,9 @@ export class PrescriptionFormComponent implements OnInit {
     }      
 
     populatePrescriptionForm() {
+        //Letter Head :- 
+        this.prescriptionForm.controls['chamberSelect'].setValue(this.prescriptionModel.letterhead.chamberName);
+
         //Patient Info :-
         this.prescriptionForm.controls['title'].setValue(this.prescriptionModel.patientInfo.title);
         this.prescriptionForm.controls['_name'].setValue(this.prescriptionModel.patientInfo.patientName);
@@ -760,6 +755,16 @@ export class PrescriptionFormComponent implements OnInit {
     }
     togglePatientInfo() {
         this.isPatientInfoOpened = !this.isPatientInfoOpened;
-    }    
+    }   
+    ngOnDestroy() {
+        if (this.getChambersObs$) { this.getChambersObs$.unsubscribe(); }
+        if (this.getCompositionObs$) { this.getCompositionObs$.unsubscribe(); }
+        if (this.getDrugsObs$) { this.getDrugsObs$.unsubscribe(); }
+        if (this.getPatientNamesObs$) { this.getPatientNamesObs$.unsubscribe(); }
+        if (this.getPatientObs$) { this.getPatientObs$.unsubscribe(); }
+        if (this.getTestsObs$) { this.getTestsObs$.unsubscribe(); }
+        if (this.getSearchResultsObs$) { this.getSearchResultsObs$.unsubscribe(); }
+        if (this.savePrescriptionObs$) { this.savePrescriptionObs$.unsubscribe(); }
+    }   
 }
 
