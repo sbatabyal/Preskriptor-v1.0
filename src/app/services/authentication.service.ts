@@ -10,7 +10,7 @@ export class AuthenticationService {
     public static loginSuccess: boolean = false;  
     public auth0Url: any = config['auth0Url'];
     public clientId: any = config['clientID'];
-    public clientSecret: any = config['clientSecret'];
+    //public clientSecret: any = config['clientSecret'];
     
     constructor(private http: Http) {        
         console.log(this.auth0Url);
@@ -46,11 +46,10 @@ export class AuthenticationService {
         let body = JSON.stringify({
             grant_type: "password", username: email, password: password, audience: "https://api.preskriptor.com",
             scope: "openid",
-            client_id: this.clientId,
-            client_secret: this.clientSecret
+            client_id: this.clientId
+            //client_secret: this.clientSecret
         });
-
-        //return this.http.post('https://ritwikroy7.auth0.com/oauth/token', body , options).toPromise()
+        
         return this.http.post(this.auth0Url, body, options).toPromise()
             .then(function (response) {
                 var result = response.json();
